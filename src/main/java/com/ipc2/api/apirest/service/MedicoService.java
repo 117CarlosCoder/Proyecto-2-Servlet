@@ -2,6 +2,7 @@ package com.ipc2.api.apirest.service;
 
 import com.ipc2.api.apirest.data.MedicoDB;
 import com.ipc2.api.apirest.model.Medico.MedicoEspecialidad;
+import com.ipc2.api.apirest.model.Medico.MedicoHorario;
 import com.ipc2.api.apirest.model.Usuario.Usuario;
 import com.sun.tools.jconsole.JConsoleContext;
 
@@ -23,6 +24,10 @@ public class MedicoService {
         Optional<MedicoEspecialidad> especialidad = medicoDB.listarEspecialidad(usuario);
         System.out.println("la especialidad da: " + especialidad);
         return especialidad;
+    }
+
+    public void crearHorario(MedicoHorario horario, Usuario usuario) {
+        medicoDB.crearHorario(horario,usuario);
     }
 
 }

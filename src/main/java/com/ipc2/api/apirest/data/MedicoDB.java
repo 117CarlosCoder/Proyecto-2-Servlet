@@ -1,6 +1,7 @@
 package com.ipc2.api.apirest.data;
 
 import com.ipc2.api.apirest.model.Medico.MedicoEspecialidad;
+import com.ipc2.api.apirest.model.Medico.MedicoHorario;
 import com.ipc2.api.apirest.model.Usuario.Usuario;
 
 import java.sql.Connection;
@@ -26,6 +27,20 @@ public class MedicoDB {
             System.out.println("Especialidad creada");
         } catch (SQLException e) {
             System.out.println("Error al crear especialidad: " + e);
+        }
+    }
+
+    public void crearHorario(MedicoHorario horario, Usuario usuario) {
+        int cui = usuario.getCui();
+        String query = "INSERT INTO HORARIO (id, cui, hora) VALUES (?, ?, ?)";
+        try (var preparedStatement = conexion.prepareStatement(query)) {
+            preparedStatement.setInt(1, horario.getId());
+            preparedStatement.setInt(2, cui);
+            preparedStatement.setString(3, horario.getHora());
+            preparedStatement.executeUpdate();
+            System.out.println("Horario creado");
+        } catch (SQLException e) {
+            System.out.println("Error al crear horario: " + e);
         }
     }
 
