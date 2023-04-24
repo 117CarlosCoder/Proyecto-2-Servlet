@@ -16,7 +16,7 @@ public class MedicoDB {
     };
     public void crearEspecialidad(MedicoEspecialidad especialidad, Usuario usuario) {
         int cui = usuario.getCui();
-        String query = "INSERT INTO ESPECIALIDAD (id, cui, costo, nombre, descripcion) VALUES (?, ?, ?, ?, ?)";
+        String query = "INSERT INTO ESPECIALIDADMEDICO (id, cui, costo, nombre, descripcion) VALUES (?, ?, ?, ?, ?)";
         try (var preparedStatement = conexion.prepareStatement(query)) {
             preparedStatement.setInt(1, especialidad.getId());
             preparedStatement.setInt(2, cui);
@@ -46,7 +46,7 @@ public class MedicoDB {
 
     public Optional<MedicoEspecialidad> listarEspecialidad(Usuario usuario) {
         int cui = usuario.getCui();
-        String query =  "SELECT * FROM ESPECIALIDAD WHERE cui = ?";
+        String query =  "SELECT * FROM ESPECIALIDADMEDICO WHERE cui = ?";
         MedicoEspecialidad medico = null;
         try (var preparedStatement = conexion.prepareStatement(query)) {
 
