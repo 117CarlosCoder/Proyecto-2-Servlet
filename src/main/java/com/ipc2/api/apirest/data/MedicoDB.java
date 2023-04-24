@@ -1,11 +1,14 @@
 package com.ipc2.api.apirest.data;
 
+import com.ipc2.api.apirest.model.Medico.Especialidades;
 import com.ipc2.api.apirest.model.Medico.MedicoEspecialidad;
 import com.ipc2.api.apirest.model.Medico.MedicoHorario;
 import com.ipc2.api.apirest.model.Usuario.Usuario;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class MedicoDB {
@@ -67,5 +70,25 @@ public class MedicoDB {
         }
 
         return Optional.ofNullable(medico);
+    }
+
+    public List<Especialidades> listarEspecialidades() {
+        var especialidades = new ArrayList<Especialidades>();
+        try (var stmt = conexion.createStatement(); var resultSet = stmt.executeQuery("SELECT * FROM ESPECIALIDAD")) {
+
+            while (resultSet.next()) {
+
+                var id = resultSet.getInt("id");
+                var nombre  = resultSet.getString("nombre") ;
+                var descripcion = resultSet.getString("descripcion");
+
+                var especialidad = new Especialidades(id,nombre,descripcion);
+
+                especialidades.add(especialidad);
+            }
+        }catch (SQLException e) {
+            System.out.println("Error al consultar: " + e);
+        }
+        return especialidades;
     }
 }

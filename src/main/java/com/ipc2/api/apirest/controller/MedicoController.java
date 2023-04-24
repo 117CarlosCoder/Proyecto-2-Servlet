@@ -1,5 +1,6 @@
 package com.ipc2.api.apirest.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonElement;
@@ -46,7 +47,17 @@ public class MedicoController extends HttpServlet {
                 response.getWriter().write(String.valueOf(listarEspecialidad(Valor)));
                 response.setStatus(HttpServletResponse.SC_OK);
             }
-
+            return;
+        }
+        if (uri.endsWith("/cargaespecialidad")) {
+            ObjectMapper objectMapper = new ObjectMapper();
+            String json = objectMapper.writeValueAsString(medicoService.listarEspecialidades());
+                System.out.println("Especialidades");
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write(json);
+                response.setStatus(HttpServletResponse.SC_OK);
+                return;
         }
         else {
             System.out.println("error");
