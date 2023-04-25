@@ -1,9 +1,12 @@
 package com.ipc2.api.apirest.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonElement;
 import com.ipc2.api.apirest.data.Conexion;
+import com.ipc2.api.apirest.data.MedicoDB;
+import com.ipc2.api.apirest.model.Medico.Especialidades;
 import com.ipc2.api.apirest.model.Medico.MedicoEspecialidad;
 import com.ipc2.api.apirest.model.Medico.MedicoHorario;
 import com.ipc2.api.apirest.model.Usuario.Usuario;
@@ -24,11 +27,13 @@ public class MedicoController extends HttpServlet {
     private GsonUtils<MedicoEspecialidad> gsonEspecialidad;
     private GsonUtils<MedicoHorario> gsonHorario;
     private MedicoService medicoService;
+
     public MedicoController() {
         gsonHorario = new GsonUtils<>();
         gsonEspecialidad = new GsonUtils<>();
         medicoService = new MedicoService(conexion.obtenerConexion());
     }
+
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Usuario Valor = null;
@@ -39,21 +44,61 @@ public class MedicoController extends HttpServlet {
 
         String uri = request.getRequestURI();
         if (uri.endsWith("/especialidad")) {
-            if (listarEspecialidad(Valor)){
+            if (listarEspecialidad(Valor)) {
                 System.out.println("Si tiene especialidad");
                 response.setContentType("text/plain");
                 response.setCharacterEncoding("UTF-8");
                 response.getWriter().write(String.valueOf(listarEspecialidad(Valor)));
                 response.setStatus(HttpServletResponse.SC_OK);
             }
-
+            return;
         }
+        if (uri.endsWith("/cargaespecialidad-especialidades")) {
+            ObjectMapper objectMapper = new ObjectMapper();
+            String jsonclass = objectMapper.writeValueAsString(medicoService.listarEspecialidades());
+            System.out.println("Especialidades");
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(jsonclass);
+            response.setStatus(HttpServletResponse.SC_OK);
+            return;
+        }
+
+        if (uri.endsWith("/cargaespecialidad-especialidad")) {
+
+            if (Valor == null) {
+                return;
+            }
+
+            if (listarEspecialidadAgregada(Valor).isEmpty() || listarEspecialidadAgregada(Valor) == null) {
+                return;
+            }
+
+            ObjectMapper objectMappeCLr = new ObjectMapper();
+            //String jsonclassCL = objectMappeCLr.writeValueAsString(medicoService.listarEspecialidad(Valor));
+            String jsonclassCL = medicoService.listarEspecialidad(Valor).isPresent() ? objectMappeCLr.writeValueAsString(medicoService.listarEspecialidad(Valor).get()) : "";
+            System.out.println("Especialidad");
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            System.out.println("Especialidad para cargar : " + jsonclassCL);
+            response.getWriter().write(jsonclassCL);
+            response.setStatus(HttpServletResponse.SC_OK);
+
+
+
+
+            return;
+        }
+
+
         else {
             System.out.println("error");
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         }
 
     }
+
+
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -89,7 +134,7 @@ public class MedicoController extends HttpServlet {
         }
 
         if (uri.endsWith("/especialidad")) {
-            if (listarEspecialidad(Valor) == false){
+            if (listarEspecialidad( Valor) == false){
                 System.out.println("Creando especialidad");
                 response.setContentType("text/plain");
                 response.setCharacterEncoding("UTF-8");
@@ -102,6 +147,25 @@ public class MedicoController extends HttpServlet {
 
 
 
+        }
+
+        if (uri.endsWith("/cargaespecialidad")) {
+            System.out.println("Solicitud para crear especialidad");
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(String.valueOf(crearEspecialidadAdmin(especialidad, Valor)));
+            response.setStatus(HttpServletResponse.SC_OK);
+            return;
+        }
+
+        if (uri.endsWith("/cargaespecialidad-cambiarcosto")) {
+            System.out.println("Solicitud para cambiar especialidad");
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            System.out.println(cambiarCosto(especialidad, Valor));
+            response.getWriter().write(String.valueOf(cambiarCosto(especialidad, Valor)));
+            response.setStatus(HttpServletResponse.SC_OK);
+            return;
         }
 
         else {
@@ -126,11 +190,27 @@ public class MedicoController extends HttpServlet {
         return true;
     }
 
+    public boolean crearEspecialidadAdmin(MedicoEspecialidad especialidad, Usuario usuario) throws IOException {
+        if (especialidad == null || usuario == null){
+            return false;
+        }
+        medicoService.crearEspecialidadAdmin(especialidad, usuario);
+        return true;
+    }
+
     public boolean crearHorario(MedicoHorario horario, Usuario usuario) throws IOException {
         if (horario == null || usuario == null){
             return false;
         }
         medicoService.crearHorario(horario, usuario);
+        return true;
+    }
+
+    public boolean cambiarCosto(MedicoEspecialidad especialidad, Usuario usuario) throws IOException {
+        if (especialidad == null || usuario == null){
+            return false;
+        }
+        medicoService.cambiarCosto(especialidad, usuario);
         return true;
     }
 
@@ -144,4 +224,10 @@ public class MedicoController extends HttpServlet {
         }
         return true;
     }
+
+    public Optional<MedicoEspecialidad> listarEspecialidadAgregada( Usuario usuario) throws IOException {
+        Optional<MedicoEspecialidad> especialidad = medicoService.listarEspecialidad(usuario);
+        return especialidad;
+    }
+
 }
