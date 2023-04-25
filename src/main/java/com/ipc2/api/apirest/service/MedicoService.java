@@ -18,8 +18,14 @@ public class MedicoService {
         medicoDB = new MedicoDB(conectar);
     }
 
+    public void cambiarCosto(MedicoEspecialidad especialidad, Usuario usuario) {
+        medicoDB.cambiarCosto(especialidad,usuario);
+    }
     public void crearEspecialidad(MedicoEspecialidad especialidad, Usuario usuario) {
         medicoDB.crearEspecialidad(especialidad,usuario);
+    }
+    public void crearEspecialidadAdmin(MedicoEspecialidad especialidad, Usuario usuario) {
+        medicoDB.crearEspecialidadAdmin(especialidad,usuario);
     }
 
     public Optional<MedicoEspecialidad> listarEspecialidad(Usuario usuario) {
