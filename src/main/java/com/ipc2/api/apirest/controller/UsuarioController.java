@@ -3,14 +3,17 @@ package com.ipc2.api.apirest.controller;
 import com.google.gson.JsonObject;
 import com.ipc2.api.apirest.data.Conexion;
 import com.ipc2.api.apirest.model.Usuario.Usuario;
+import com.ipc2.api.apirest.reportes.GenerarReportes.GenerarReportes;
 import com.ipc2.api.apirest.service.UsuarioService;
 import com.ipc2.api.apirest.utils.GsonUtils;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
+import java.io.OutputStream;
 
 @WebServlet("/usuarios/*")
 
@@ -18,11 +21,13 @@ public class UsuarioController extends HttpServlet {
 
     Conexion conexion = new Conexion();
 
+    private GenerarReportes generarPDF;
     private GsonUtils<Usuario> gsonUsuario;
     private UsuarioService usuarioService;
     private Usuario usuarioLogin;
 
     public UsuarioController() {
+        generarPDF = new GenerarReportes();
         gsonUsuario = new GsonUtils<>();
         usuarioService = new UsuarioService(conexion.obtenerConexion());
     }
@@ -45,7 +50,7 @@ public class UsuarioController extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
         HttpSession session = request.getSession(true);
         session.setAttribute("user", usuarioLogin);
@@ -54,6 +59,7 @@ public class UsuarioController extends HttpServlet {
         session.setAttribute("conexion", conexion.obtenerConexion());
         String contentType = request.getContentType();
         String uri = request.getRequestURI();
+        String Datos = "";
         Usuario usuario = null;
         System.out.println(uri);
         System.out.println("Sesion en usuariocontroller : " + session);
@@ -63,6 +69,9 @@ public class UsuarioController extends HttpServlet {
             System.out.println("Es json");
         }
         else {
+            Datos = request.getReader().readLine();
+
+            System.out.println("Esto es : " + Datos);
             System.out.println("No es json");
         }
         System.out.println(usuario);
@@ -70,6 +79,11 @@ public class UsuarioController extends HttpServlet {
         if (uri.endsWith("/iniciar")) {
             System.out.println("iniciando sesion");
             iniciarUsuario(request,response,session,usuario);
+            response.setStatus(HttpServletResponse.SC_OK);
+            return;
+        }
+        if (uri.endsWith("/reportes-administrador")) {
+            generarPDF.generarRep(response,Datos);
             response.setStatus(HttpServletResponse.SC_OK);
             return;
         }
@@ -119,14 +133,11 @@ public class UsuarioController extends HttpServlet {
             jsonObject.addProperty("valor",true);
             return jsonObject;
         }
-        if(valor == false){
-            JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("tipo", false);
-            jsonObject.addProperty("valor",false);
-            return jsonObject;
-        }
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("tipo", false);
+        jsonObject.addProperty("valor",false);
+        return jsonObject;
 
-        return null;
     }
     public boolean crearUsuario(Usuario user, HttpServletResponse response) throws IOException {
         System.out.println(user);

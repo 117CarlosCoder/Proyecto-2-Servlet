@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.1.final using JasperReports Library version 6.20.1-7584acb244139816654f64e2fd57a00d3e31921e  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Examenes" language="groovy" pageWidth="1000" pageHeight="842" whenNoDataType="NoDataSection" columnWidth="960" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="8f673fe2-9f1d-475e-8b4e-9d6a19812495">
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DBMedicos"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<queryString>
+		<![CDATA[SELECT * FROM EXAMEN WHERE paciente = 'pac1']]>
+	</queryString>
+	<field name="id" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="id"/>
+		<property name="com.jaspersoft.studio.field.label" value="id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="examen"/>
+	</field>
+	<field name="fecha_solicitud" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="fecha_solicitud"/>
+		<property name="com.jaspersoft.studio.field.label" value="fecha_solicitud"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="examen"/>
+	</field>
+	<field name="fecha_fin" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="fecha_fin"/>
+		<property name="com.jaspersoft.studio.field.label" value="fecha_fin"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="examen"/>
+	</field>
+	<field name="estado" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="estado"/>
+		<property name="com.jaspersoft.studio.field.label" value="estado"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="examen"/>
+	</field>
+	<field name="paciente" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="paciente"/>
+		<property name="com.jaspersoft.studio.field.label" value="paciente"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="examen"/>
+	</field>
+	<field name="laboratorio" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="laboratorio"/>
+		<property name="com.jaspersoft.studio.field.label" value="laboratorio"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="examen"/>
+	</field>
+	<field name="porcentaje" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="porcentaje"/>
+		<property name="com.jaspersoft.studio.field.label" value="porcentaje"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="examen"/>
+	</field>
+	<field name="costo" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="costo"/>
+		<property name="com.jaspersoft.studio.field.label" value="costo"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="examen"/>
+	</field>
+	<background>
+		<band splitType="Prevent"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="90" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="60" width="220" height="30" forecolor="#736343" uuid="cdc73ca4-71ed-42e9-9545-a3a1f6614453"/>
+				<textElement>
+					<font size="20" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha Solicitud]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="220" y="60" width="179" height="30" forecolor="#736343" uuid="0d6a0e91-92ff-462e-900d-ce4ef503d9f2"/>
+				<textElement>
+					<font size="20" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha Fin]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="399" y="60" width="130" height="30" forecolor="#736343" uuid="608a04c1-45f6-4404-86d0-9d34c86ca28e"/>
+				<textElement>
+					<font size="20" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Estado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="529" y="60" width="160" height="30" forecolor="#736343" uuid="60b11585-1ad6-4231-af2e-7d39127733d6"/>
+				<textElement>
+					<font size="20" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Laboratorio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement isPrintRepeatedValues="false" x="690" y="60" width="132" height="30" forecolor="#736343" uuid="bbb1a65c-59bd-4540-9cd4-dc6321a9f794"/>
+				<textElement>
+					<font size="20"/>
+				</textElement>
+				<text><![CDATA[Costo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="404" y="23" width="130" height="30" uuid="c9b379e3-fc0c-48ee-8227-2191fff2787d"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="22"/>
+				</textElement>
+				<text><![CDATA[Examenes]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="51" splitType="Stretch">
+			<frame>
+				<reportElement x="0" y="1" width="821" height="40" uuid="46729f61-0ab3-496d-99d9-7bfc6a790897"/>
+				<textField>
+					<reportElement x="0" y="1" width="221" height="30" uuid="ae806a80-67d1-4feb-b06f-6685250b0c84"/>
+					<textElement>
+						<font size="20"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{fecha_solicitud}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="221" y="0" width="179" height="30" uuid="26a0f4a9-5415-4cd8-955f-8e165508f223"/>
+					<textElement>
+						<font size="20"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{fecha_fin}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="400" y="1" width="130" height="30" uuid="faf61b6d-90c4-4712-819d-5c742902057b"/>
+					<textElement>
+						<font size="20"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{estado}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="530" y="0" width="160" height="30" uuid="0c8f3ead-7d70-42d5-9aeb-9e72224b036f"/>
+					<textElement>
+						<font size="20"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{laboratorio}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="690" y="1" width="131" height="30" uuid="8b829944-2342-46e4-b97d-97010ad955ec"/>
+					<textElement>
+						<font size="20"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{costo}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
