@@ -30,8 +30,27 @@ public class GenerarReportes extends HttpServlet {
             System.out.println("Cargar informe");
         System.out.println("Valor de la ruta: " + Ruta);
 
+            switch (Ruta){
+                case "Porcentaje":
+                    rutaRelativa = "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Admin/Reporte-porcentajes.jasper";
+                    break;
+
+                case "Top5Laboratorios":
+                    rutaRelativa = "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Admin/Top5Laboratorios.jasper";
+                    break;
+
+                case  "Top5Medicos":
+                    rutaRelativa = "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Admin/Top5Medicos.jasper";
+                    break;
+                case "Totalingresos":
+                    rutaRelativa = "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Admin/Totalingresos.jasper";
+                    break;
+
+            }
+
             if (Ruta == "Porcentaje"){
-                 rutaRelativa = "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Admin/Reporte-porcentajes.jasper";
+                rutaRelativa = "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Admin/Reporte-porcentajes.jasper";
+                System.out.println("Funciona");
             }
             if (Ruta == "Top5Laboratorios"){
             rutaRelativa = "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Admin/Top5Laboratorios.jasper";
@@ -44,6 +63,7 @@ public class GenerarReportes extends HttpServlet {
             }
 
         // Escribir el informe en memoria
+        System.out.println("Ruta relativa : " + rutaRelativa);
         System.out.println("Escribir informe");
 
             try {
