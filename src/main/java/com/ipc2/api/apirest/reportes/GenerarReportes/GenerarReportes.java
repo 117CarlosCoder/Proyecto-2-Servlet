@@ -17,58 +17,22 @@ import java.util.Enumeration;
 
 public class GenerarReportes extends HttpServlet {
 
-    public void generarRep(HttpServletResponse response,String Ruta) throws ServletException, IOException {
+    public void generarRep(HttpServletResponse response,String Ruta , String Tipo) throws ServletException,IOException {
+        System.out.println("Cargar informe");
+        JasperReport informe = null;
+        JasperPrint jasperPrint = null;
+        String rutaRelativa = "";
 
-            // Generar el informe con JasperReports
-            JasperReport informe = null;
-            JasperPrint jasperPrint = null;
-            String rutaRelativa = "";
-
-        //String archivoJasper = "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/java/com/ipc2/api/apirest/reportes/reporte-medico.jasper";
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            // Código para generar el informe...
-            System.out.println("Cargar informe");
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        System.out.println("Cargar informe");
         System.out.println("Valor de la ruta: " + Ruta);
 
-            switch (Ruta){
-                case "Porcentaje":
-                    rutaRelativa = "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Admin/Reporte-porcentajes.jasper";
-                    break;
+        rutaRelativa = reporte(Ruta,Tipo);
 
-                case "Top5Laboratorios":
-                    rutaRelativa = "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Admin/Top5Laboratorios.jasper";
-                    break;
-
-                case  "Top5Medicos":
-                    rutaRelativa = "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Admin/Top5Medicos.jasper";
-                    break;
-                case "Totalingresos":
-                    rutaRelativa = "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Admin/Totalingresos.jasper";
-                    break;
-
-            }
-
-            if (Ruta == "Porcentaje"){
-                rutaRelativa = "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Admin/Reporte-porcentajes.jasper";
-                System.out.println("Funciona");
-            }
-            if (Ruta == "Top5Laboratorios"){
-            rutaRelativa = "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Admin/Top5Laboratorios.jasper";
-            }
-            if (Ruta == "Top5Medicos"){
-            rutaRelativa = "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Admin/Top5Medicos.jasper";
-            }
-            if (Ruta == "Totalingresos"){
-            rutaRelativa = "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Admin/Totalingresos.jasper";
-            }
-
-        // Escribir el informe en memoria
         System.out.println("Ruta relativa : " + rutaRelativa);
         System.out.println("Escribir informe");
 
             try {
-
-
                 System.out.println(rutaRelativa);
                 //ServletContext servletContext = getServletContext();
                 //System.out.println(servletContext);
@@ -95,20 +59,80 @@ public class GenerarReportes extends HttpServlet {
 
         byte[] bytes = baos.toByteArray();
 
-            // Configurar la respuesta HTTP
             response.setContentType("application/pdf");
             response.setHeader("Content-disposition", "attachment; filename=reporte.pdf");
             response.setContentLength(bytes.length);
 
         System.out.println("subiendo informe");
 
-
-        // Enviar el archivo al cliente
             OutputStream out = response.getOutputStream();
             out.write(bytes);
             out.flush();
         }
+
+
+    public String reporte( String Ruta, String Tipo){
+        if (Tipo == "Administrador"){
+            switch (Ruta){
+                case "Porcentaje":
+                    System.out.println("Entro");
+                    return "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Admin/Reporte-porcentajes.jasper";
+
+                case "Top5Laboratorios":
+                    return  "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Admin/Top5Laboratorios.jasper";
+
+                case  "Top5Medicos":
+                    return "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Admin/Top5Medicos.jasper";
+
+                case "Totalingresos":
+                    return "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Admin/Totalingresos.jasper";
+            }
+        }
+        if (Tipo == "Paciente"){
+            switch (Ruta){
+                case "ConsultasMedicas":
+                    return "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Paciente/ConsultasMedicas.jasper";
+
+                case "ExamenesMedicos":
+                    return "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Paciente/HistorialEsamenes.jasper";
+
+                case  "HistorialMedico":
+                    return "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Paciente/HistorialMedico.jasper";
+
+                case "Saldo":
+                    return "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Paciente/Saldo.jasper";
+            }
+        }
+        if (Tipo == "Medicos"){
+            switch (Ruta){
+                case "Saldo":
+                    return "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Medico/Saldo.jasper";
+
+                case "Top5Especialidades":
+                    return "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Medico/Top5Especialidades.jasper";
+
+                case  "Top5Pacientes":
+                    return "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Medico/Top5Pacientes.jasper";
+            }
+        }
+        if (Tipo == "Laboratorios"){
+            switch (Ruta){
+
+                case "Top5Examenes":
+                    return  "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Laboratorio/Top5Laboratorios.jasper";
+
+                case  "Top5Pacientes":
+                    return "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Laboratorio/Top5Pacientes.jasper";
+
+                case "Saldo":
+                    return "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Laboratorio/Saldo.jasper";
+            }
+        }
+
+        return "";
     }
+
+}
 
 
 

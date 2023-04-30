@@ -33,14 +33,20 @@ public class LaboratorioController extends HttpServlet {
         if (session != null) {
             Valor = (Usuario) session.getAttribute("user");
         }
+        if (Valor == null) {
+            System.out.println("No hay usuario en registro");
+            return;
+        }
+
 
         String uri = request.getRequestURI();
         if (uri.endsWith("/tipoexamen")) {
-            System.out.println("Si tiene tipo examen");
-            response.setContentType("text/plain");
-            response.setCharacterEncoding("UTF-8");
-            response.getWriter().write(String.valueOf(listarTipoExamen(Valor)));
-            response.setStatus(HttpServletResponse.SC_OK);
+                System.out.println("Si tiene tipo examen");
+                response.setContentType("text/plain");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write(String.valueOf(listarTipoExamen(Valor)));
+                response.setStatus(HttpServletResponse.SC_OK);
+
         }
         else {
             System.out.println("error");
@@ -104,6 +110,7 @@ public class LaboratorioController extends HttpServlet {
         }
         Optional<LaboratorioInfoExamen> labinfoexamen = laboratorioService.listarExamenInfo(usuario);
         if (labinfoexamen.isEmpty() || labinfoexamen == null){
+            System.out.println(labinfoexamen);
             return false;
         }
         return true;

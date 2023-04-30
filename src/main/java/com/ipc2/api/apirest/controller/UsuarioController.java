@@ -64,6 +64,7 @@ public class UsuarioController extends HttpServlet {
         System.out.println(uri);
         System.out.println("Sesion en usuariocontroller : " + session);
 
+
         if (contentType != null && contentType.startsWith("application/json")){
            usuario = gsonUsuario.readFromJson(request, Usuario.class);
             System.out.println("Es json");
@@ -82,11 +83,7 @@ public class UsuarioController extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_OK);
             return;
         }
-        if (uri.endsWith("/reportes-administrador")) {
-            generarPDF.generarRep(response,Datos);
-            response.setStatus(HttpServletResponse.SC_OK);
-            return;
-        }
+
         if (uri.endsWith("/cerrar")) {
             System.out.println("cerrando sesion");
             cerrarUsuario(request,response);

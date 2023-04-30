@@ -41,6 +41,9 @@ public class MedicoController extends HttpServlet {
         if (session != null) {
             Valor = (Usuario) session.getAttribute("user");
         }
+        if (Valor == null) {
+            return;
+        }
 
         String uri = request.getRequestURI();
         if (uri.endsWith("/especialidad")) {
@@ -53,6 +56,7 @@ public class MedicoController extends HttpServlet {
             }
             return;
         }
+
         if (uri.endsWith("/cargaespecialidad-especialidades")) {
             ObjectMapper objectMapper = new ObjectMapper();
             String jsonclass = objectMapper.writeValueAsString(medicoService.listarEspecialidades());
@@ -132,6 +136,47 @@ public class MedicoController extends HttpServlet {
         else {
             System.out.println("No es json");
         }
+        if (uri.endsWith("/cargaconsulta")) {
+            System.out.println("Entrando a carga de consulta");
+            String Datos = request.getReader().readLine();
+            System.out.println("Datos : " +Datos );
+            if (Datos == null){
+                Datos = json;
+            }
+            System.out.println("Datos : " + json );
+            ObjectMapper objectMappeCLr = new ObjectMapper();
+            ObjectMapper objectMapper = new ObjectMapper();
+            String jsonclass = medicoService.listarHistorialConsulta(Integer.parseInt(Datos)).isEmpty() ? "" : objectMappeCLr.writeValueAsString(medicoService.listarHistorialConsulta(Integer.parseInt(Datos)));
+
+            System.out.println("conversion de clase : " + jsonclass );
+            System.out.println("Especialidades");
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(jsonclass);
+            response.setStatus(HttpServletResponse.SC_OK);
+            return;
+        }
+
+        if (uri.endsWith("/cargaexamenes")) {
+            System.out.println("Entrando a carga de examenes");
+            String Datos = request.getReader().readLine();
+            System.out.println("Datos : " +Datos );
+            if (Datos == null){
+                Datos = json;
+            }
+            System.out.println("Datos : " + json );
+            ObjectMapper objectMappeCLr = new ObjectMapper();
+            ObjectMapper objectMapper = new ObjectMapper();
+            String jsonclass = medicoService.listarExamenesPaciente(Integer.parseInt(Datos)).isEmpty() ? "" : objectMappeCLr.writeValueAsString(medicoService.listarExamenesPaciente(Integer.parseInt(Datos)));
+
+            System.out.println("conversion de clase : " + jsonclass );
+            System.out.println("Examenes");
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(jsonclass);
+            response.setStatus(HttpServletResponse.SC_OK);
+            return;
+        }
 
         if (uri.endsWith("/especialidad")) {
             if (listarEspecialidad( Valor) == false){
@@ -142,6 +187,7 @@ public class MedicoController extends HttpServlet {
                 crearHorario(horas,Valor);
                 response.getWriter().write(String.valueOf(crearEspecialidad(especialidad,Valor)));
                 response.setStatus(HttpServletResponse.SC_OK);
+                return;
 
             }
 

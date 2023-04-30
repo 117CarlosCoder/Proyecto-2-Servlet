@@ -1,9 +1,7 @@
 package com.ipc2.api.apirest.service;
 
 import com.ipc2.api.apirest.data.MedicoDB;
-import com.ipc2.api.apirest.model.Medico.Especialidades;
-import com.ipc2.api.apirest.model.Medico.MedicoEspecialidad;
-import com.ipc2.api.apirest.model.Medico.MedicoHorario;
+import com.ipc2.api.apirest.model.Medico.*;
 import com.ipc2.api.apirest.model.Usuario.Usuario;
 import com.sun.tools.jconsole.JConsoleContext;
 
@@ -34,6 +32,17 @@ public class MedicoService {
         return especialidad;
     }
 
+    public List<ConsultaPaciente> listarHistorialConsulta(int id) {
+        List<ConsultaPaciente> consultaPaciente = medicoDB.listarHistorialConsulta(id);
+        System.out.println("la consultapaciente da: " + consultaPaciente);
+        return consultaPaciente;
+    }
+
+    public List<ExamenPaciente> listarExamenesPaciente(int id) {
+        List<ExamenPaciente> examenPacientes = medicoDB.listarHistorialExamenes(id);
+        System.out.println("la examenespaciente da: " + examenPacientes);
+        return examenPacientes;
+    }
     public List<Especialidades> listarEspecialidades() {
         List<Especialidades> especialidades= medicoDB.listarEspecialidades();
         System.out.println("las especialidades : " + especialidades);

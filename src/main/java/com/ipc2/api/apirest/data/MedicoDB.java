@@ -1,9 +1,7 @@
 package com.ipc2.api.apirest.data;
 
 import com.google.protobuf.NullValue;
-import com.ipc2.api.apirest.model.Medico.Especialidades;
-import com.ipc2.api.apirest.model.Medico.MedicoEspecialidad;
-import com.ipc2.api.apirest.model.Medico.MedicoHorario;
+import com.ipc2.api.apirest.model.Medico.*;
 import com.ipc2.api.apirest.model.Usuario.Usuario;
 
 import javax.lang.model.type.NullType;
@@ -24,7 +22,7 @@ public class MedicoDB {
         int cui = usuario.getCui();
         String query = "INSERT INTO ESPECIALIDADMEDICO (id, cui, costo, nombre, descripcion) VALUES (?, ?, ?, ?, ?)";
         try (var preparedStatement = conexion.prepareStatement(query)) {
-            preparedStatement.setInt(1, especialidad.getId());
+            preparedStatement.setInt(1, Types.INTEGER);
             preparedStatement.setInt(2, cui);
             preparedStatement.setBigDecimal(3, especialidad.getCosto());
             preparedStatement.setString(4, especialidad.getNombre());
@@ -56,7 +54,7 @@ public class MedicoDB {
         int cui = usuario.getCui();
         String query = "INSERT INTO HORARIO (id, cui, hora) VALUES (?, ?, ?)";
         try (var preparedStatement = conexion.prepareStatement(query)) {
-            preparedStatement.setInt(1, horario.getId());
+            preparedStatement.setInt(1, Types.INTEGER);
             preparedStatement.setInt(2, cui);
             preparedStatement.setString(3, horario.getHora());
             preparedStatement.executeUpdate();
@@ -109,6 +107,63 @@ public class MedicoDB {
             System.out.println("Error al consultar: " + e);
         }
         return especialidades;
+    }
+
+    public List<ConsultaPaciente> listarHistorialConsulta(int bid) {
+        var consultaPacientes = new ArrayList<ConsultaPaciente>();
+        String query =  "SELECT paciente, fecha_inicio, fecha_fin, estado, medico, especialidad  FROM CONSULTA  WHERE paciente = ? ORDER BY fecha_inicio ASC";
+            try (var preparedStatement = conexion.prepareStatement(query) ){
+
+                preparedStatement.setInt(1, bid);
+
+
+                try (var resultSet = preparedStatement.executeQuery()) {
+                    while (resultSet.next()) {
+                        var paciente = resultSet.getInt("paciente");
+                        var fecha_incio = resultSet.getString("fecha_inicio");
+                        var fecha_fin = resultSet.getString("fecha_fin");
+                        var estado = resultSet.getString("estado");
+                        var medico = resultSet.getString("medico");
+                        var especialidad = resultSet.getString("especialidad");
+                        var consultar = new ConsultaPaciente(paciente, fecha_incio, fecha_fin,estado,medico, especialidad);
+
+
+                        consultaPacientes.add(consultar);
+                    }
+                }
+            }catch (SQLException e) {
+                System.out.println("Error al listar especialidades: " + e);
+            }
+
+            return consultaPacientes;
+    }
+
+    public List<ExamenPaciente> listarHistorialExamenes(int bid) {
+        var examenPacientes = new ArrayList<ExamenPaciente>();
+        String query =  "SELECT paciente, fecha_solicitud, fecha_fin, laboratorio, estado  FROM EXAMEN  WHERE paciente = ? ORDER BY fecha_solicitud ASC";
+        try (var preparedStatement = conexion.prepareStatement(query) ){
+
+            preparedStatement.setInt(1, bid);
+
+
+            try (var resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    var paciente = resultSet.getInt("paciente");
+                    var fecha_solicitud = resultSet.getString("fecha_solicitud");
+                    var fecha_fin = resultSet.getString("fecha_fin");
+                    var estado = resultSet.getString("estado");
+                    var laboratorio = resultSet.getString("laboratorio");
+                    var examenes = new ExamenPaciente(paciente, fecha_solicitud, fecha_fin,laboratorio,estado);
+
+
+                    examenPacientes.add(examenes);
+                }
+            }
+        }catch (SQLException e) {
+            System.out.println("Error al listar examenes: " + e);
+        }
+
+        return examenPacientes;
     }
 
     public void cambiarCosto(MedicoEspecialidad especialidad, Usuario usuario) {
