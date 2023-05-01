@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.20.1.final using JasperReports Library version 6.20.1-7584acb244139816654f64e2fd57a00d3e31921e  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Top5Especialidades" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="df013db5-f76e-44d3-b0df-bcbc46d93160">
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DBMedicos"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="MedicDB"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
@@ -17,15 +17,14 @@
 		<![CDATA[SELECT especialidad, SUM(costo) AS total_ingresos
 FROM CONSULTA
 GROUP BY especialidad
-ORDER BY total_ingresos DESC;
-]]>
+ORDER BY total_ingresos DESC]]>
 	</queryString>
-	<field name="especialidad" class="java.lang.Integer">
+	<field name="especialidad" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="especialidad"/>
 		<property name="com.jaspersoft.studio.field.label" value="especialidad"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="consulta"/>
 	</field>
-	<field name="total_ingresos" class="java.lang.Double">
+	<field name="total_ingresos" class="java.math.BigDecimal">
 		<property name="com.jaspersoft.studio.field.name" value="total_ingresos"/>
 		<property name="com.jaspersoft.studio.field.label" value="total_ingresos"/>
 	</field>
@@ -36,7 +35,7 @@ ORDER BY total_ingresos DESC;
 		<band height="150" splitType="Stretch">
 			<image onErrorType="Icon">
 				<reportElement x="0" y="0" width="130" height="126" uuid="1c003177-754c-448f-8ce1-16868856f545"/>
-				<imageExpression><![CDATA["src/main/webapp/WEB-INF/Reportes/medic.png"]]></imageExpression>
+				<imageExpression><![CDATA["/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/medic.png"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement style="Title" x="130" y="0" width="525" height="110" uuid="bc1ce1da-8232-46ea-be55-cec4abb986dd"/>
@@ -47,7 +46,7 @@ ORDER BY total_ingresos DESC;
 			</staticText>
 			<image onErrorType="Icon">
 				<reportElement x="655" y="0" width="137" height="136" uuid="4aa6f4d1-27dc-4b34-9227-59e19ce2c959"/>
-				<imageExpression><![CDATA["src/main/webapp/WEB-INF/Reportes/medic-rep.png"]]></imageExpression>
+				<imageExpression><![CDATA["/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/medic-rep.png"]]></imageExpression>
 			</image>
 		</band>
 	</title>

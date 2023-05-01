@@ -2,7 +2,7 @@
 <!-- Created with Jaspersoft Studio version 6.20.1.final using JasperReports Library version 6.20.1-7584acb244139816654f64e2fd57a00d3e31921e  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Saldo" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="df013db5-f76e-44d3-b0df-bcbc46d93160">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DBMedicos"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="MedicDB"/>
 	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
@@ -31,7 +31,7 @@ FROM (
     SELECT SUM(e.costo) AS ingresos
     FROM EXAMEN e
     WHERE e.estado = 'FINALIZADA'
-) AS t;]]>
+) AS t]]>
 	</queryString>
 	<field name="tipo_servicio" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="tipo_servicio"/>
@@ -48,7 +48,7 @@ FROM (
 		<band height="150" splitType="Stretch">
 			<image onErrorType="Icon">
 				<reportElement x="0" y="0" width="150" height="126" uuid="1c003177-754c-448f-8ce1-16868856f545"/>
-				<imageExpression><![CDATA["src/main/webapp/WEB-INF/Reportes/medic.png"]]></imageExpression>
+				<imageExpression><![CDATA["/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/medic.png"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement style="Title" x="180" y="50" width="460" height="62" uuid="bc1ce1da-8232-46ea-be55-cec4abb986dd"/>
@@ -57,7 +57,7 @@ FROM (
 			</staticText>
 			<image onErrorType="Icon">
 				<reportElement x="655" y="0" width="147" height="136" uuid="4aa6f4d1-27dc-4b34-9227-59e19ce2c959"/>
-				<imageExpression><![CDATA["src/main/webapp/WEB-INF/Reportes/medic-rep.png"]]></imageExpression>
+				<imageExpression><![CDATA["/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/medic-rep.png"]]></imageExpression>
 			</image>
 		</band>
 	</title>

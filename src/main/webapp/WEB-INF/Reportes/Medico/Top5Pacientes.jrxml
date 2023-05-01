@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.20.1.final using JasperReports Library version 6.20.1-7584acb244139816654f64e2fd57a00d3e31921e  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Top5Pacientes" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="df013db5-f76e-44d3-b0df-bcbc46d93160">
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DBMedicos"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="MedicDB"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
@@ -14,29 +14,29 @@
 		</conditionalStyle>
 	</style>
 	<queryString>
-		<![CDATA[SELECT u.id AS id_paciente, u.nombre AS paciente, COUNT(*) AS cantidad_consultas, SUM(costo) AS total_gastos
+		<![CDATA[SELECT u.id AS paciente, u.nombre AS nombre, COUNT(*) AS cantidad_consultas, SUM(costo) AS total_gastos
 FROM CONSULTA c
-JOIN USUARIO u ON c.paciente = u.nombre_usuario
+JOIN USUARIO u ON c.paciente = u.id
 WHERE c.estado = 'FINALIZADA'
 AND u.tipo = 'Paciente'
 GROUP BY u.id
 ORDER BY total_gastos DESC]]>
 	</queryString>
-	<field name="id_paciente" class="java.lang.Integer">
+	<field name="paciente" class="java.lang.Integer">
 		<property name="com.jaspersoft.studio.field.name" value="id"/>
-		<property name="com.jaspersoft.studio.field.label" value="id_paciente"/>
+		<property name="com.jaspersoft.studio.field.label" value="paciente"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="usuario"/>
 	</field>
-	<field name="paciente" class="java.lang.String">
+	<field name="nombre" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="nombre"/>
-		<property name="com.jaspersoft.studio.field.label" value="paciente"/>
+		<property name="com.jaspersoft.studio.field.label" value="nombre"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="usuario"/>
 	</field>
 	<field name="cantidad_consultas" class="java.lang.Long">
 		<property name="com.jaspersoft.studio.field.name" value="cantidad_consultas"/>
 		<property name="com.jaspersoft.studio.field.label" value="cantidad_consultas"/>
 	</field>
-	<field name="total_gastos" class="java.lang.Double">
+	<field name="total_gastos" class="java.math.BigDecimal">
 		<property name="com.jaspersoft.studio.field.name" value="total_gastos"/>
 		<property name="com.jaspersoft.studio.field.label" value="total_gastos"/>
 	</field>
@@ -47,7 +47,7 @@ ORDER BY total_gastos DESC]]>
 		<band height="150" splitType="Stretch">
 			<image onErrorType="Icon">
 				<reportElement x="0" y="0" width="130" height="126" uuid="1c003177-754c-448f-8ce1-16868856f545"/>
-				<imageExpression><![CDATA["src/main/webapp/WEB-INF/Reportes/medic.png"]]></imageExpression>
+				<imageExpression><![CDATA["/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/medic.png"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement style="Title" x="130" y="0" width="525" height="110" uuid="bc1ce1da-8232-46ea-be55-cec4abb986dd"/>
@@ -58,7 +58,7 @@ ORDER BY total_gastos DESC]]>
 			</staticText>
 			<image onErrorType="Icon">
 				<reportElement x="655" y="0" width="137" height="136" uuid="4aa6f4d1-27dc-4b34-9227-59e19ce2c959"/>
-				<imageExpression><![CDATA["src/main/webapp/WEB-INF/Reportes/medic-rep.png"]]></imageExpression>
+				<imageExpression><![CDATA["/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/medic-rep.png"]]></imageExpression>
 			</image>
 		</band>
 	</title>
@@ -87,7 +87,7 @@ ORDER BY total_gastos DESC]]>
 				<textElement>
 					<font size="20" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Especialiadad]]></text>
+				<text><![CDATA[Paciente]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="339" y="1" width="222" height="30" forecolor="#736343" uuid="b66b711b-b2bc-469c-9c80-7ab9d5b9635e"/>
@@ -116,7 +116,7 @@ ORDER BY total_gastos DESC]]>
 					<textElement verticalAlignment="Middle">
 						<font size="18"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{id_paciente}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{paciente}]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="160" y="0" width="177" height="30" uuid="860840a8-6165-4e44-b696-ab82ce425fa8">
@@ -125,7 +125,7 @@ ORDER BY total_gastos DESC]]>
 					<textElement verticalAlignment="Middle">
 						<font size="18"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{paciente}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{nombre}]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="340" y="0" width="219" height="30" uuid="b9797203-0000-49fe-898f-edb3750d4869">

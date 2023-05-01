@@ -1,4 +1,4 @@
-package com.ipc2.api.apirest.model.Medico;
+package com.ipc2.api.apirest.model.Paciente;
 import lombok.*;
 @Getter @Setter @ToString
 @NoArgsConstructor @AllArgsConstructor

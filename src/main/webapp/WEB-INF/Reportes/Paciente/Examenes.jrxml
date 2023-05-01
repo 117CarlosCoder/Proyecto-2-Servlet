@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.20.1.final using JasperReports Library version 6.20.1-7584acb244139816654f64e2fd57a00d3e31921e  -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Examenes" language="groovy" pageWidth="1000" pageHeight="842" whenNoDataType="NoDataSection" columnWidth="960" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="8f673fe2-9f1d-475e-8b4e-9d6a19812495">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Examenes" language="groovy" pageWidth="1000" pageHeight="842" columnWidth="960" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="8f673fe2-9f1d-475e-8b4e-9d6a19812495">
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
@@ -10,10 +10,10 @@
 	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DBMedicos"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="MedicDB"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<queryString>
-		<![CDATA[SELECT * FROM EXAMEN WHERE paciente = 'pac1']]>
+		<![CDATA[SELECT * FROM EXAMEN WHERE paciente = 1]]>
 	</queryString>
 	<field name="id" class="java.lang.Integer">
 		<property name="com.jaspersoft.studio.field.name" value="id"/>
@@ -35,7 +35,7 @@
 		<property name="com.jaspersoft.studio.field.label" value="estado"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="examen"/>
 	</field>
-	<field name="paciente" class="java.lang.String">
+	<field name="paciente" class="java.lang.Integer">
 		<property name="com.jaspersoft.studio.field.name" value="paciente"/>
 		<property name="com.jaspersoft.studio.field.label" value="paciente"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="examen"/>
@@ -95,7 +95,7 @@
 				<text><![CDATA[Laboratorio]]></text>
 			</staticText>
 			<staticText>
-				<reportElement isPrintRepeatedValues="false" x="690" y="60" width="132" height="30" forecolor="#736343" uuid="bbb1a65c-59bd-4540-9cd4-dc6321a9f794"/>
+				<reportElement x="690" y="60" width="132" height="30" forecolor="#736343" uuid="bbb1a65c-59bd-4540-9cd4-dc6321a9f794"/>
 				<textElement>
 					<font size="20"/>
 				</textElement>

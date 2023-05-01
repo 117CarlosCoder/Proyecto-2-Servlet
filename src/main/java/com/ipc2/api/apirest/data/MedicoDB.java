@@ -1,10 +1,9 @@
 package com.ipc2.api.apirest.data;
 
-import com.google.protobuf.NullValue;
 import com.ipc2.api.apirest.model.Medico.*;
+import com.ipc2.api.apirest.model.Paciente.ConsultaPaciente;
 import com.ipc2.api.apirest.model.Usuario.Usuario;
 
-import javax.lang.model.type.NullType;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Types;
@@ -22,7 +21,7 @@ public class MedicoDB {
         int cui = usuario.getCui();
         String query = "INSERT INTO ESPECIALIDADMEDICO (id, cui, costo, nombre, descripcion) VALUES (?, ?, ?, ?, ?)";
         try (var preparedStatement = conexion.prepareStatement(query)) {
-            preparedStatement.setInt(1, Types.INTEGER);
+            preparedStatement.setNull(1, Types.INTEGER);
             preparedStatement.setInt(2, cui);
             preparedStatement.setBigDecimal(3, especialidad.getCosto());
             preparedStatement.setString(4, especialidad.getNombre());
@@ -54,7 +53,7 @@ public class MedicoDB {
         int cui = usuario.getCui();
         String query = "INSERT INTO HORARIO (id, cui, hora) VALUES (?, ?, ?)";
         try (var preparedStatement = conexion.prepareStatement(query)) {
-            preparedStatement.setInt(1, Types.INTEGER);
+            preparedStatement.setNull(1, Types.INTEGER);
             preparedStatement.setInt(2, cui);
             preparedStatement.setString(3, horario.getHora());
             preparedStatement.executeUpdate();
