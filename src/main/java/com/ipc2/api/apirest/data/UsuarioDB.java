@@ -1,5 +1,6 @@
 package com.ipc2.api.apirest.data;
 
+import com.ipc2.api.apirest.model.Paciente.Paciente;
 import com.ipc2.api.apirest.model.Usuario.Usuario;
 
 import java.sql.Connection;
@@ -32,6 +33,26 @@ public class UsuarioDB {
             System.out.println("Error al crear usuario: " + e);
         }
     }
+
+    public void crearPaciente(Paciente user) {
+        String query = "INSERT INTO USUARIO (cui, tipo, nombre, nombre_usuario, contraseña, direccion, correo_electronico, fecha_de_nacimiento, saldo) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?)";
+        try (var preparedStatement = conexion.prepareStatement(query)) {
+            preparedStatement.setInt(1, user.getCui());
+            preparedStatement.setString(2, user.getTipo());
+            preparedStatement.setString(3, user.getNombre());
+            preparedStatement.setString(4, user.getNombre_usuario());
+            preparedStatement.setString(5, user.getContraseña());
+            preparedStatement.setString(6, user.getDireccion());
+            preparedStatement.setString(7, user.getCorreo());
+            preparedStatement.setString(8, user.getFecha_nacimiento());
+            preparedStatement.setBigDecimal(9, user.getSaldo());
+            preparedStatement.executeUpdate();
+            System.out.println("Usuario creado");
+        } catch (SQLException e) {
+            System.out.println("Error al crear usuario: " + e);
+        }
+    }
+
     public List<Usuario> listar() {
         var usuarios = new ArrayList<Usuario>();
         try (var stmt = conexion.createStatement(); var resultSet = stmt.executeQuery("SELECT * FROM USUARIO")) {

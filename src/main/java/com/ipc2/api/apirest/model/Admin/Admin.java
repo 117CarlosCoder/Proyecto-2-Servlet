@@ -1,4 +1,6 @@
 package com.ipc2.api.apirest.model.Admin;
 
-public class Admin {
+import com.ipc2.api.apirest.model.Usuario.Usuario;
+
+public class Admin extends Usuario {
 }

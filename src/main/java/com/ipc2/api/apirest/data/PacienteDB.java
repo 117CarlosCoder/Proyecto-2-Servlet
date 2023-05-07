@@ -6,6 +6,7 @@ import com.ipc2.api.apirest.model.Paciente.ListarMedicosNombre;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,8 +20,8 @@ public class PacienteDB {
         String query = "INSERT INTO CONSULTA (id, fecha_inicio, estado, paciente, medico) VALUES (?, ?, ?, ?, ?)";
         try (var preparedStatement = conexion.prepareStatement(query)) {
             preparedStatement.setNull(1, Types.INTEGER);
-            preparedStatement.setString(2, paciente.getFecha_inicio());
-            preparedStatement.setString(3, paciente.getEstado());
+            preparedStatement.setString(2, String.valueOf(LocalDate.now()));
+            preparedStatement.setString(3, "AGENDADA");
             preparedStatement.setInt(4, paciente.getPaciente());
             preparedStatement.setString(5, paciente.getMedico());
             preparedStatement.executeUpdate();
@@ -61,7 +62,7 @@ public class PacienteDB {
         try (var stmt = conexion.createStatement(); var resultSet = stmt.executeQuery(query)) {
 
             while (resultSet.next()) {
-                var nombre  = resultSet.getString("nombre") ;
+                var nombre  = resultSet.getString("medico") ;
                 var especialidad = resultSet.getString("especialidad");
 
                 var medico = new ListarMedicosNombre(nombre,especialidad);

@@ -1,23 +1,34 @@
 package com.ipc2.api.apirest.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 import com.ipc2.api.apirest.data.Conexion;
+import com.ipc2.api.apirest.model.Admin.Admin;
+import com.ipc2.api.apirest.model.Laboratorio.Laborartorio;
+import com.ipc2.api.apirest.model.Medico.Medico;
+import com.ipc2.api.apirest.model.Medico.MedicoEspecialidad;
+import com.ipc2.api.apirest.model.Medico.MedicoHorario;
+import com.ipc2.api.apirest.model.Paciente.Paciente;
+import com.ipc2.api.apirest.model.Usuario.User;
 import com.ipc2.api.apirest.model.Usuario.Usuario;
 import com.ipc2.api.apirest.reportes.GenerarReportes.GenerarReportes;
 import com.ipc2.api.apirest.service.UsuarioService;
 import com.ipc2.api.apirest.utils.GsonUtils;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.*;
+
 import java.io.IOException;
-import java.io.OutputStream;
 
 @WebServlet("/usuarios/*")
 
 public class UsuarioController extends HttpServlet {
+
+    private GsonUtils<MedicoEspecialidad> gsonEspecialidad;
+    private GsonUtils<MedicoHorario> gsonHorario;
 
     Conexion conexion = new Conexion();
 
@@ -27,6 +38,8 @@ public class UsuarioController extends HttpServlet {
     private Usuario usuarioLogin;
 
     public UsuarioController() {
+        gsonHorario = new GsonUtils<>();
+        gsonEspecialidad = new GsonUtils<>();
         generarPDF = new GenerarReportes();
         gsonUsuario = new GsonUtils<>();
         usuarioService = new UsuarioService(conexion.obtenerConexion());
@@ -57,16 +70,70 @@ public class UsuarioController extends HttpServlet {
         getServletContext().setAttribute("userSession", session);
         session.setMaxInactiveInterval(3600);
         session.setAttribute("conexion", conexion.obtenerConexion());
+
+
+        System.out.println("Calculando error");
+        String json = request.getReader().readLine();
+        Gson gson = new Gson();
+        MedicoEspecialidad especialidad = null;
+        MedicoHorario horas = null;
+        JsonElement jsonElement = null;
+        try {
+            jsonElement =gson.fromJson(json, JsonElement.class);
+        } catch (JsonSyntaxException e) {
+
+        }
         String contentType = request.getContentType();
         String uri = request.getRequestURI();
         String Datos = "";
         Usuario usuario = null;
+        User usuariocargado = null;
+        System.out.println("Calculando error2");
+        //Part filePart = request.getPart("file"); // Obtiene la parte del archivo de la solicitud
+        //InputStream fileContent = filePart.getInputStream(); // Obtiene el flujo de entrada del archivo
+
+        System.out.println("Archivo entrante : " + json);
         System.out.println(uri);
         System.out.println("Sesion en usuariocontroller : " + session);
 
+        if (uri.endsWith("/cerrar")) {
+            System.out.println("cerrando sesion");
+            cerrarUsuario(request,response);
+            response.setStatus(HttpServletResponse.SC_OK);
+            return;
+        }
+
+        if (contentType != null && jsonElement.isJsonObject()){
+            //JsonElement jsonElement = JsonParser.parseString(json);
+
+
+            //usuariocargado = gson.fromJson( jsonElement, Usuario.class);
+
+
+            try {
+                System.out.println("carga1");
+                usuario = gson.fromJson(jsonElement, Usuario.class);
+                horas = gson.fromJson( jsonElement, MedicoHorario.class);
+                System.out.println("carga2");
+                usuariocargado = gson.fromJson(jsonElement, User.class);
+                System.out.println("Usuario cargado: " + usuariocargado);
+                System.out.println("carga3");
+                especialidad = gson.fromJson( jsonElement, MedicoEspecialidad.class);
+            } catch (Exception e) {
+
+            }
+
+
+            System.out.println("valor de especialidad : " + especialidad);
+            System.out.println("valor de horario : " + horas);
+            System.out.println("Es json");
+        }
+
+        System.out.println("Entrando a los procesos");
 
         if (contentType != null && contentType.startsWith("application/json")){
-           usuario = gsonUsuario.readFromJson(request, Usuario.class);
+           //usuario = gsonUsuario.readFromJson(request, Usuario.class);
+
             System.out.println("Es json");
         }
         else {
@@ -75,7 +142,7 @@ public class UsuarioController extends HttpServlet {
             System.out.println("Esto es : " + Datos);
             System.out.println("No es json");
         }
-        System.out.println(usuario);
+        System.out.println("valor de usuario : " + usuario);
 
         if (uri.endsWith("/iniciar")) {
             System.out.println("iniciando sesion");
@@ -84,16 +151,45 @@ public class UsuarioController extends HttpServlet {
             return;
         }
 
-        if (uri.endsWith("/cerrar")) {
-            System.out.println("cerrando sesion");
-            cerrarUsuario(request,response);
-            response.setStatus(HttpServletResponse.SC_OK);
-            return;
-        }
+
         if (uri.endsWith("/crear")) {
             System.out.println("creando usuario");
             crearUsuario(usuario,response);
+            return;
 
+        }
+        if (uri.endsWith("/cargardatos")) {
+            System.out.println("cargando datos");
+            System.out.println("cargando datos : " + json);
+            ObjectMapper objectMapper = new ObjectMapper();
+            Paciente pruebausuario = usuariocargado.getPacientes().get(0);
+            try{
+                System.out.println(usuariocargado.getAdmins());
+
+            }
+            catch (Exception e){
+                System.out.println("Error al cargar el admins: " + e.getMessage());
+                e.printStackTrace();
+            }
+
+            Admin admins = usuariocargado.getAdmins().get(0);
+            Laborartorio laboratorios = usuariocargado.getLaborartorios().get(0);
+            Medico medicos = usuariocargado.getMedicos().get(0);
+
+            Usuario probando = new Usuario(pruebausuario.getCui(), pruebausuario.getTipo(), pruebausuario.getNombre(), pruebausuario.getNombre_usuario(), pruebausuario.getContraseña(), pruebausuario.getDireccion(), pruebausuario.getCorreo(), pruebausuario.getFecha_nacimiento(), pruebausuario.getSaldo());
+            Usuario adm = new Usuario(admins.getCui(), admins.getTipo(), admins.getNombre(), admins.getNombre_usuario(), admins.getContraseña(), admins.getDireccion(), admins.getCorreo(), admins.getFecha_nacimiento(), admins.getSaldo());
+            Usuario med = new Usuario(medicos.getCui(), medicos.getTipo(), medicos.getNombre(), medicos.getNombre_usuario(), medicos.getContraseña(), medicos.getDireccion(), medicos.getCorreo(), medicos.getFecha_nacimiento(), medicos.getSaldo());
+            Usuario lab = new Usuario(laboratorios.getCui(), laboratorios.getTipo(), laboratorios.getNombre(), laboratorios.getNombre_usuario(), laboratorios.getContraseña(), laboratorios.getDireccion(), laboratorios.getCorreo(), laboratorios.getFecha_nacimiento(), laboratorios.getSaldo());
+
+            //Usuario probando = pruebausuario;
+            //usuariocargado = objectMapper.readValue(request.getInputStream(), Usuario.class);
+            response.getWriter().write(String.valueOf(crearUsuario(probando,response)));
+            response.getWriter().write(String.valueOf(crearUsuario(adm,response)));
+            response.getWriter().write(String.valueOf(crearUsuario(med,response)));
+            response.getWriter().write(String.valueOf(crearUsuario(lab,response)));
+
+            response.setStatus(HttpServletResponse.SC_OK);
+            return;
         }
         else {
             System.out.println("error");
@@ -113,13 +209,11 @@ public class UsuarioController extends HttpServlet {
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             response.getWriter().write(String.valueOf(crearJson(true)));
-            response.setStatus(HttpServletResponse.SC_OK);
             System.out.println("Sesion Iniciada");
         } else {
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             response.getWriter().write(String.valueOf(crearJson(false)));
-            response.setStatus(HttpServletResponse.SC_OK);
         }
     }
 
@@ -143,6 +237,7 @@ public class UsuarioController extends HttpServlet {
         response.setContentType("text/plain");
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write("Usuario Creado");
+        response.setStatus(HttpServletResponse.SC_OK);
         return true;
     }
     public boolean validarUsuario(String username, String password, String email) {

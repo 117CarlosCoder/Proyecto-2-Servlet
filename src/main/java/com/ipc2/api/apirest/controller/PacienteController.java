@@ -84,6 +84,15 @@ public class PacienteController extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_OK);
         }
 
+        if (uri.endsWith("/crear")) {
+            ObjectMapper objectMapper = new ObjectMapper();
+            String jsonclass = objectMapper.writeValueAsString(pacienteService.listarMedicosNombres("Med1"));
+            System.out.println("Listando medicoo especifico");
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(jsonclass);
+            response.setStatus(HttpServletResponse.SC_OK);
+        }
 
     }
 

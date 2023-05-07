@@ -1,4 +1,6 @@
 package com.ipc2.api.apirest.model.Paciente;
 
-public class Paciente {
+import com.ipc2.api.apirest.model.Usuario.Usuario;
+
+public class Paciente extends Usuario {
 }

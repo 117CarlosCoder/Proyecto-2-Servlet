@@ -121,9 +121,10 @@ public class MedicoController extends HttpServlet {
         System.out.println("Sesion en medicocontroller : " + session);
         System.out.println("valor de usuario : " + Valor);
         String json = request.getReader().readLine(); // Lee el archivo JSON enviado desde Angula
+        System.out.println("valor de angular : " + json);
         Gson gson = new Gson();
         JsonElement jsonElement = gson.fromJson(json, JsonElement.class);
-        ;
+
 
         if (contentType != null && jsonElement.isJsonObject()){
             //JsonElement jsonElement = JsonParser.parseString(json);
@@ -145,7 +146,6 @@ public class MedicoController extends HttpServlet {
             }
             System.out.println("Datos : " + json );
             ObjectMapper objectMappeCLr = new ObjectMapper();
-            ObjectMapper objectMapper = new ObjectMapper();
             String jsonclass = medicoService.listarHistorialConsulta(Integer.parseInt(Datos)).isEmpty() ? "" : objectMappeCLr.writeValueAsString(medicoService.listarHistorialConsulta(Integer.parseInt(Datos)));
 
             System.out.println("conversion de clase : " + jsonclass );
@@ -157,14 +157,32 @@ public class MedicoController extends HttpServlet {
             return;
         }
 
+        if (uri.endsWith("/crearconsulta")) {
+            System.out.println("Entrando a crear de consulta");
+            String myString = request.getParameter("valor");
+            String Datos = request.getReader().readLine();
+            String guardar = json;
+            System.out.println("Datos : " + guardar);
+            if (guardar != null && !guardar.isEmpty()){
+                response.getWriter().write(String.valueOf(true));
+            }
+
+            System.out.println("Consultas");
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.setStatus(HttpServletResponse.SC_OK);
+            return;
+        }
+
         if (uri.endsWith("/cargaexamenes")) {
             System.out.println("Entrando a carga de examenes");
             String Datos = request.getReader().readLine();
             System.out.println("Datos : " +Datos );
+
+            System.out.println("Datos : " + json );
             if (Datos == null){
                 Datos = json;
             }
-            System.out.println("Datos : " + json );
             ObjectMapper objectMappeCLr = new ObjectMapper();
             ObjectMapper objectMapper = new ObjectMapper();
             String jsonclass = medicoService.listarExamenesPaciente(Integer.parseInt(Datos)).isEmpty() ? "" : objectMappeCLr.writeValueAsString(medicoService.listarExamenesPaciente(Integer.parseInt(Datos)));
