@@ -1,6 +1,8 @@
 package com.ipc2.api.apirest.data;
 
 import com.ipc2.api.apirest.model.Laboratorio.LaboratorioInfoExamen;
+import com.ipc2.api.apirest.model.Laboratorio.TipoExamen;
+import com.ipc2.api.apirest.model.Laboratorio.ValorExamen;
 import com.ipc2.api.apirest.model.Usuario.Usuario;
 
 import java.sql.Connection;
@@ -22,6 +24,32 @@ public class LaboratorioDB {
             preparedStatement.setString(3, infoexamen.getNombre());
             preparedStatement.setBigDecimal(4, infoexamen.getCosto());
             preparedStatement.setString(5, infoexamen.getDescripcion());
+            preparedStatement.executeUpdate();
+            System.out.println("Tipo de examen creado");
+        } catch (SQLException e) {
+            System.out.println("Error al crear tipo de examen: " + e);
+        }
+    }
+
+    public void cargarTipoExam(TipoExamen infoexamen) {
+        String query = "INSERT INTO TIPOEXAMEN (id, nombre, descripcion) VALUES (?, ?, ?)";
+        try (var preparedStatement = conexion.prepareStatement(query)) {
+            preparedStatement.setInt(1, infoexamen.getId());
+            preparedStatement.setString(2, infoexamen.getNombre());
+            preparedStatement.setString(3, infoexamen.getDescripcion());
+            preparedStatement.executeUpdate();
+            System.out.println("Tipo de examen creado");
+        } catch (SQLException e) {
+            System.out.println("Error al crear tipo de examen: " + e);
+        }
+    }
+
+    public void cargarValorExam(ValorExamen infoexamen) {
+        String query = "INSERT INTO EXAMENCOSTO (id, cui, costo) VALUES (?, ?, ?)";
+        try (var preparedStatement = conexion.prepareStatement(query)) {
+            preparedStatement.setInt(1, infoexamen.getId());
+            preparedStatement.setInt(2, infoexamen.getCui());
+            preparedStatement.setBigDecimal(3, infoexamen.getCosto());
             preparedStatement.executeUpdate();
             System.out.println("Tipo de examen creado");
         } catch (SQLException e) {

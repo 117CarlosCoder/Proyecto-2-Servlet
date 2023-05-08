@@ -7,6 +7,7 @@ public class ConsultaPaciente {
     private String fecha_inicio;
     private String fecha_fin;
     private String estado;
+    private double porcentaje;
     private String medico;
     private String especialidad;
 

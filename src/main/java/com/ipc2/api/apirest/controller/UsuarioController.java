@@ -8,13 +8,14 @@ import com.google.gson.JsonSyntaxException;
 import com.ipc2.api.apirest.data.Conexion;
 import com.ipc2.api.apirest.model.Admin.Admin;
 import com.ipc2.api.apirest.model.Laboratorio.Laborartorio;
-import com.ipc2.api.apirest.model.Medico.Medico;
-import com.ipc2.api.apirest.model.Medico.MedicoEspecialidad;
-import com.ipc2.api.apirest.model.Medico.MedicoHorario;
+import com.ipc2.api.apirest.model.Laboratorio.ValorExamen;
+import com.ipc2.api.apirest.model.Medico.*;
 import com.ipc2.api.apirest.model.Paciente.Paciente;
 import com.ipc2.api.apirest.model.Usuario.User;
 import com.ipc2.api.apirest.model.Usuario.Usuario;
 import com.ipc2.api.apirest.reportes.GenerarReportes.GenerarReportes;
+import com.ipc2.api.apirest.service.LaboratorioService;
+import com.ipc2.api.apirest.service.MedicoService;
 import com.ipc2.api.apirest.service.UsuarioService;
 import com.ipc2.api.apirest.utils.GsonUtils;
 import jakarta.servlet.ServletException;
@@ -35,6 +36,10 @@ public class UsuarioController extends HttpServlet {
     private GenerarReportes generarPDF;
     private GsonUtils<Usuario> gsonUsuario;
     private UsuarioService usuarioService;
+    private MedicoService medicoService;
+
+    private LaboratorioService laboratorioService;
+
     private Usuario usuarioLogin;
 
     public UsuarioController() {
@@ -43,6 +48,7 @@ public class UsuarioController extends HttpServlet {
         generarPDF = new GenerarReportes();
         gsonUsuario = new GsonUtils<>();
         usuarioService = new UsuarioService(conexion.obtenerConexion());
+        medicoService = new MedicoService(conexion.obtenerConexion());
     }
 
     @Override
@@ -104,11 +110,6 @@ public class UsuarioController extends HttpServlet {
         }
 
         if (contentType != null && jsonElement.isJsonObject()){
-            //JsonElement jsonElement = JsonParser.parseString(json);
-
-
-            //usuariocargado = gson.fromJson( jsonElement, Usuario.class);
-
 
             try {
                 System.out.println("carga1");
@@ -122,7 +123,6 @@ public class UsuarioController extends HttpServlet {
             } catch (Exception e) {
 
             }
-
 
             System.out.println("valor de especialidad : " + especialidad);
             System.out.println("valor de horario : " + horas);
@@ -172,17 +172,35 @@ public class UsuarioController extends HttpServlet {
                 e.printStackTrace();
             }
 
+
+
+
             Admin admins = usuariocargado.getAdmins().get(0);
             Laborartorio laboratorios = usuariocargado.getLaborartorios().get(0);
             Medico medicos = usuariocargado.getMedicos().get(0);
+            for (CargaEspecialidad especialidadmedico : medicos.getEspecialidades()) {
+                CargaEspecialidad cargarespecialidadmedico = new CargaEspecialidad(especialidadmedico.getId(),especialidadmedico.getCui(), especialidadmedico.getCosto());
+                System.out.println("La carga del medico : " + cargarespecialidadmedico);
+                response.getWriter().write(String.valueOf(cargarEspecialidadMedico(cargarespecialidadmedico)));
+            }
+
+            try {
+                for (ValorExamen valorExamenes : laboratorios.getValorExamenes()) {
+                    ValorExamen valorExamenesLab = new ValorExamen(valorExamenes.getId(),valorExamenes.getCui(), valorExamenes.getCosto());
+                    System.out.println("La carga del examenvalor : " + valorExamenesLab);
+                    response.getWriter().write(String.valueOf(cargarValorExam(valorExamenes)));
+                }
+            }catch (Exception e ){
+                System.out.println("El error es : " + e);
+            }
+
+
 
             Usuario probando = new Usuario(pruebausuario.getCui(), pruebausuario.getTipo(), pruebausuario.getNombre(), pruebausuario.getNombre_usuario(), pruebausuario.getContraseña(), pruebausuario.getDireccion(), pruebausuario.getCorreo(), pruebausuario.getFecha_nacimiento(), pruebausuario.getSaldo());
             Usuario adm = new Usuario(admins.getCui(), admins.getTipo(), admins.getNombre(), admins.getNombre_usuario(), admins.getContraseña(), admins.getDireccion(), admins.getCorreo(), admins.getFecha_nacimiento(), admins.getSaldo());
             Usuario med = new Usuario(medicos.getCui(), medicos.getTipo(), medicos.getNombre(), medicos.getNombre_usuario(), medicos.getContraseña(), medicos.getDireccion(), medicos.getCorreo(), medicos.getFecha_nacimiento(), medicos.getSaldo());
             Usuario lab = new Usuario(laboratorios.getCui(), laboratorios.getTipo(), laboratorios.getNombre(), laboratorios.getNombre_usuario(), laboratorios.getContraseña(), laboratorios.getDireccion(), laboratorios.getCorreo(), laboratorios.getFecha_nacimiento(), laboratorios.getSaldo());
 
-            //Usuario probando = pruebausuario;
-            //usuariocargado = objectMapper.readValue(request.getInputStream(), Usuario.class);
             response.getWriter().write(String.valueOf(crearUsuario(probando,response)));
             response.getWriter().write(String.valueOf(crearUsuario(adm,response)));
             response.getWriter().write(String.valueOf(crearUsuario(med,response)));
@@ -255,6 +273,22 @@ public class UsuarioController extends HttpServlet {
 
         response.getWriter().write(String.valueOf(false));
         return false;
+    }
+
+    public boolean cargarEspecialidadMedico(CargaEspecialidad paciente) throws IOException {
+        if (paciente == null ){
+            return false;
+        }
+        medicoService.cargarEspecialidadesMedico(paciente);
+        return true;
+    }
+
+    public boolean cargarValorExam(ValorExamen examen) throws IOException {
+        if (examen == null ){
+            return false;
+        }
+        laboratorioService.cargarValorExam(examen);
+        return true;
     }
 
     /*private int processPath(HttpServletRequest request, HttpServletResponse response) throws IOException {

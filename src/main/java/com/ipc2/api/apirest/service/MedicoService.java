@@ -21,6 +21,14 @@ public class MedicoService {
     public void crearEspecialidad(MedicoEspecialidad especialidad, Usuario usuario) {
         medicoDB.crearEspecialidad(especialidad,usuario);
     }
+
+    public void cargarEspecialidades( Especialidades especialidad) {
+        medicoDB.cargarEspecialidades(especialidad);
+    }
+
+    public void cargarEspecialidadesMedico( CargaEspecialidad especialidad) {
+        medicoDB.cargarEspecialidadesMedico(especialidad);
+    }
     public void crearEspecialidadAdmin(MedicoEspecialidad especialidad, Usuario usuario) {
         medicoDB.crearEspecialidadAdmin(especialidad,usuario);
     }

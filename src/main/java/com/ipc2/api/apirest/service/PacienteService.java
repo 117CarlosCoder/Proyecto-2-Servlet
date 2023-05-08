@@ -20,6 +20,10 @@ public class PacienteService {
         pacienteDB.solicitarConsulta(paciente);
     }
 
+    public void cargarConsulta(ConsultaPaciente paciente) {
+        pacienteDB.cargarConsulta(paciente);
+    }
+
     public List<ListarMedicosNombre> listarMedicosNombres(String med) {
         List<ListarMedicosNombre> medicos= pacienteDB.listarMedicosNombre(med);
         System.out.println("los medicos : " + medicos);

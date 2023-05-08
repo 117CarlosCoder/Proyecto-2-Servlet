@@ -3,6 +3,8 @@ package com.ipc2.api.apirest.data;
 import com.ipc2.api.apirest.model.Medico.Especialidades;
 import com.ipc2.api.apirest.model.Paciente.ConsultaPaciente;
 import com.ipc2.api.apirest.model.Paciente.ListarMedicosNombre;
+
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Types;
@@ -24,6 +26,25 @@ public class PacienteDB {
             preparedStatement.setString(3, "AGENDADA");
             preparedStatement.setInt(4, paciente.getPaciente());
             preparedStatement.setString(5, paciente.getMedico());
+            preparedStatement.executeUpdate();
+            System.out.println("Consulta creada");
+        } catch (SQLException e) {
+            System.out.println("Error al crear consulta: " + e);
+        }
+    }
+
+    public void cargarConsulta(ConsultaPaciente paciente) {
+        String query = "INSERT INTO CONSULTA (id, fecha_inicio,fecha_fin, estado,porcentaje, costo, paciente, medico, especialidad) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        try (var preparedStatement = conexion.prepareStatement(query)) {
+            preparedStatement.setNull(1, Types.INTEGER);
+            preparedStatement.setString(2, paciente.getFecha_inicio());
+            preparedStatement.setString(3, paciente.getFecha_fin());
+            preparedStatement.setString(4, paciente.getEstado());
+            preparedStatement.setDouble(5, paciente.getPorcentaje());
+            preparedStatement.setBigDecimal(6, BigDecimal.valueOf(0));
+            preparedStatement.setInt(7, paciente.getPaciente());
+            preparedStatement.setString(8, paciente.getMedico());
+            preparedStatement.setString(9, paciente.getEspecialidad());
             preparedStatement.executeUpdate();
             System.out.println("Consulta creada");
         } catch (SQLException e) {

@@ -33,6 +33,32 @@ public class MedicoDB {
         }
     }
 
+    public void cargarEspecialidades(Especialidades especialidad) {
+        String query = "INSERT INTO ESPECIALIDAD (id, nombre, descripcion) VALUES (?, ?, ?)";
+        try (var preparedStatement = conexion.prepareStatement(query)) {
+            preparedStatement.setInt(1, especialidad.getId());
+            preparedStatement.setString(2, especialidad.getNombre());
+            preparedStatement.setString(3, especialidad.getDescripcion());
+            preparedStatement.executeUpdate();
+            System.out.println("Especialidad cargada");
+        } catch (SQLException e) {
+            System.out.println("Error al crear especialidad: " + e);
+        }
+    }
+
+    public void cargarEspecialidadesMedico(CargaEspecialidad especialidad) {
+        String query = "INSERT INTO ESPECIALIDADCOSTO (id,cui, costo) VALUES (?, ?, ?)";
+        try (var preparedStatement = conexion.prepareStatement(query)) {
+            preparedStatement.setInt(1, especialidad.getId());
+            preparedStatement.setInt(2, especialidad.getCui());
+            preparedStatement.setBigDecimal(3, especialidad.getCosto());
+            preparedStatement.executeUpdate();
+            System.out.println("EspecialidadCosto cargada");
+        } catch (SQLException e) {
+            System.out.println("Error al crear especialidadcosto: " + e);
+        }
+    }
+
     public void crearEspecialidadAdmin(MedicoEspecialidad especialidades, Usuario usuario) {
         int cui = usuario.getCui();
         String query = "INSERT INTO ESPECIALIDADADMIN (id, cui, costo, nombre, descripcion) VALUES (?, ?, ?, ?, ?)";
@@ -110,7 +136,7 @@ public class MedicoDB {
 
     public List<ConsultaPaciente> listarHistorialConsulta(int bid) {
         var consultaPacientes = new ArrayList<ConsultaPaciente>();
-        String query =  "SELECT paciente, fecha_inicio, fecha_fin, estado, medico, especialidad  FROM CONSULTA  WHERE paciente = ? ORDER BY fecha_inicio ASC";
+        String query =  "SELECT paciente, fecha_inicio, fecha_fin,porcentaje, estado, medico, especialidad  FROM CONSULTA  WHERE paciente = ? ORDER BY fecha_inicio ASC";
             try (var preparedStatement = conexion.prepareStatement(query) ){
 
                 preparedStatement.setInt(1, bid);
@@ -121,10 +147,11 @@ public class MedicoDB {
                         var paciente = resultSet.getInt("paciente");
                         var fecha_incio = resultSet.getString("fecha_inicio");
                         var fecha_fin = resultSet.getString("fecha_fin");
+                        var porcentaje = resultSet.getInt("porcentaje");
                         var estado = resultSet.getString("estado");
                         var medico = resultSet.getString("medico");
                         var especialidad = resultSet.getString("especialidad");
-                        var consultar = new ConsultaPaciente(paciente, fecha_incio, fecha_fin,estado,medico, especialidad);
+                        var consultar = new ConsultaPaciente(paciente, fecha_incio, fecha_fin, estado,porcentaje,medico, especialidad);
 
 
                         consultaPacientes.add(consultar);
