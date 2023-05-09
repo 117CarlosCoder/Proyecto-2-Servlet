@@ -1,5 +1,6 @@
 package com.ipc2.api.apirest.reportes.GenerarReportes;
 
+import com.ipc2.api.apirest.model.Usuario.Usuario;
 import com.ipc2.api.apirest.reportes.Conexion.ConexionDatos;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
@@ -14,10 +15,14 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.sql.SQLException;
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GenerarReportes extends HttpServlet {
 
-    public void generarRep(HttpServletResponse response,String Ruta , String Tipo) throws ServletException,IOException {
+
+
+    public void generarRep(HttpServletResponse response, String Ruta , String Tipo, ConexionDatos conexionDatos, Usuario usuario) throws ServletException, IOException, JRException, SQLException {
         System.out.println("Cargar informe");
         JasperReport informe = null;
         JasperPrint jasperPrint = null;
@@ -32,7 +37,7 @@ public class GenerarReportes extends HttpServlet {
         System.out.println("Ruta relativa : " + rutaRelativa);
         System.out.println("Escribir informe");
 
-            try {
+            /* try {
                 System.out.println(rutaRelativa);
                 //ServletContext servletContext = getServletContext();
                 //System.out.println(servletContext);
@@ -52,21 +57,41 @@ public class GenerarReportes extends HttpServlet {
                 System.out.println(e);
                 throw new RuntimeException(e);
 
-            }
+            }*/
 
         System.out.println("Informe Inscrito");
 
+        JasperReport jasperReport = JasperCompileManager.compileReport(rutaRelativa);
+        Map<String, Object> parameters = new HashMap<>() {{
+            put("medico", usuario.getNombre_usuario());
+            put("paciente", usuario.getNombre_usuario());
+            put("laboratorio", usuario.getNombre_usuario());
 
-        byte[] bytes = baos.toByteArray();
+        }};
+
+        JasperPrint jasperPrinter = null;
+
+        System.out.println(parameters);
+        try {
+             jasperPrinter = JasperFillManager.fillReport(jasperReport, parameters, conexionDatos.getConnection());
+        }catch (Exception e){
+            System.out.println("Error de jasper : " + e);
+        }
+
+        System.out.println(jasperPrinter);
+        //JasperExportManager.exportReportToPdfFile(jasperPrint, "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Medico/Top5Especialidades.pdf");
+        byte[] pdfBytes = JasperExportManager.exportReportToPdf(jasperPrinter);
+
+        //byte[] bytes = baos.toByteArray();
 
             response.setContentType("application/pdf");
             response.setHeader("Content-disposition", "attachment; filename=reporte.pdf");
-            response.setContentLength(bytes.length);
+            response.setContentLength(pdfBytes.length);
 
         System.out.println("subiendo informe");
 
             OutputStream out = response.getOutputStream();
-            out.write(bytes);
+            out.write(pdfBytes);
             out.flush();
         }
 
@@ -76,56 +101,56 @@ public class GenerarReportes extends HttpServlet {
             switch (Ruta){
                 case "Porcentaje":
                     System.out.println("Entro");
-                    return "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Admin/Reporte-porcentajes.jasper";
+                    return "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Admin/Porcentajes.jrxml";
 
                 case "Top5Laboratorios":
-                    return  "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Admin/Top5Laboratorios.jasper";
+                    return  "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Admin/Top5Laboratorios.jrxml";
 
                 case  "Top5Medicos":
-                    return "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Admin/Top5Medicos.jasper";
+                    return "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Admin/Top5Medicos.jrxml";
 
                 case "Totalingresos":
-                    return "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Admin/Totalingresos.jasper";
+                    return "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Admin/Totalingresos.jrxml";
             }
         }
         if (Tipo == "Paciente"){
             switch (Ruta){
                 case "ConsultasMedicas":
-                    return "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Paciente/ConsultasMedicas.jasper";
+                    return "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Paciente/ConsultasMedicas.jrxml";
 
                 case "ExamenesMedicos":
-                    return "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Paciente/HistorialEsamenes.jasper";
+                    return "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Paciente/HistorialEsamenes.jrxml";
 
                 case  "HistorialMedico":
-                    return "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Paciente/HistorialMedico.jasper";
+                    return "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Paciente/HistorialMedico.jrxml";
 
                 case "Saldo":
-                    return "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Paciente/Saldo.jasper";
+                    return "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Paciente/Saldo.jrxml";
             }
         }
         if (Tipo == "Medicos"){
             switch (Ruta){
                 case "Saldo":
-                    return "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Medico/Saldo.jasper";
+                    return "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Medico/Saldo.jrxml";
 
                 case "Top5Especialidades":
-                    return "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Medico/Top5Especialidades.jasper";
+                    return "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Medico/Top5Especialidades.jrxml";
 
                 case  "Top5Pacientes":
-                    return "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Medico/Top5Pacientes.jasper";
+                    return "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Medico/Top5Pacientes.jrxml";
             }
         }
         if (Tipo == "Laboratorios"){
             switch (Ruta){
 
                 case "Top5Examenes":
-                    return  "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Laboratorio/Top5Laboratorios.jasper";
+                    return  "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Laboratorio/Top5Examenes.jrxml";
 
                 case  "Top5Pacientes":
-                    return "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Laboratorio/Top5Pacientes.jasper";
+                    return "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Laboratorio/Top5Pacientes.jrxml";
 
                 case "Saldo":
-                    return "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Laboratorio/Saldo.jasper";
+                    return "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Laboratorio/Saldo.jrxml";
             }
         }
 

@@ -13,15 +13,27 @@
 			<style backcolor="#E6DAC3"/>
 		</conditionalStyle>
 	</style>
+	<parameter name="laboratorio" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[SELECT laboratorio, SUM(costo) AS total_ingresos
+		<![CDATA[SELECT laboratorio, estado, examen, SUM(costo) AS total_ingresos
 FROM EXAMEN
-GROUP BY laboratorio
+WHERE laboratorio = $P{laboratorio}   AND estado = 'FINALIZADA'
+GROUP BY laboratorio,examen
 ORDER BY total_ingresos DESC]]>
 	</queryString>
 	<field name="laboratorio" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="laboratorio"/>
 		<property name="com.jaspersoft.studio.field.label" value="laboratorio"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="examen"/>
+	</field>
+	<field name="estado" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="estado"/>
+		<property name="com.jaspersoft.studio.field.label" value="estado"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="examen"/>
+	</field>
+	<field name="examen" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="examen"/>
+		<property name="com.jaspersoft.studio.field.label" value="examen"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="examen"/>
 	</field>
 	<field name="total_ingresos" class="java.math.BigDecimal">
@@ -54,7 +66,7 @@ ORDER BY total_ingresos DESC]]>
 		<band splitType="Stretch"/>
 	</pageHeader>
 	<columnHeader>
-		<band height="33" splitType="Stretch">
+		<band height="35" splitType="Stretch">
 			<line>
 				<reportElement positionType="FixRelativeToBottom" x="0" y="0" width="802" height="1" uuid="e9d2002a-c8ee-4649-a258-640dad29110c">
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
@@ -71,11 +83,18 @@ ORDER BY total_ingresos DESC]]>
 				<text><![CDATA[Laboratorio]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="337" y="1" width="222" height="30" forecolor="#736343" uuid="b66b711b-b2bc-469c-9c80-7ab9d5b9635e"/>
+				<reportElement x="480" y="2" width="222" height="30" forecolor="#736343" uuid="b66b711b-b2bc-469c-9c80-7ab9d5b9635e"/>
 				<textElement>
 					<font size="20" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Ingresos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="238" y="0" width="237" height="30" forecolor="#736343" uuid="b09b7d37-5ecc-416d-a5b6-243c3e52816f"/>
+				<textElement>
+					<font size="20" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Examen]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
@@ -93,13 +112,22 @@ ORDER BY total_ingresos DESC]]>
 					<textFieldExpression><![CDATA[$F{laboratorio}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="340" y="0" width="219" height="30" uuid="b9797203-0000-49fe-898f-edb3750d4869">
+					<reportElement x="480" y="0" width="219" height="30" uuid="b9797203-0000-49fe-898f-edb3750d4869">
 						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="bcc56830-117b-40b9-88ca-b7df6dc76d10"/>
 					</reportElement>
 					<textElement verticalAlignment="Middle">
 						<font size="18"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{total_ingresos}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="240" y="0" width="237" height="30" uuid="e3dcfaf5-09ed-42bf-b76f-d1796ddd31be">
+						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="0cb516b8-25dc-4049-8038-1571ebc164f0"/>
+					</reportElement>
+					<textElement verticalAlignment="Middle">
+						<font size="18"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{examen}]]></textFieldExpression>
 				</textField>
 			</frame>
 		</band>

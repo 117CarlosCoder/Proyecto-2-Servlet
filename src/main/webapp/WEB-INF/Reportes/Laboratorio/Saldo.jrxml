@@ -13,31 +13,34 @@
 			<style backcolor="#E6DAC3"/>
 		</conditionalStyle>
 	</style>
+	<parameter name="laboratorio" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[SELECT 'Consultas' AS tipo_servicio, SUM(c.costo) AS ingresos 
-FROM CONSULTA c
+		<![CDATA[SELECT 'Examenes' AS tipo_servicio, SUM(c.costo) AS ingresos 
+FROM EXAMEN c
 WHERE c.estado = 'FINALIZADA'
+AND c.laboratorio =  $P{laboratorio} 
 UNION
-SELECT 'Exámenes' AS tipo_servicio, SUM(e.costo) AS ingresos
-FROM EXAMEN e
-WHERE e.estado = 'FINALIZADA'
+SELECT 'Saldo' AS tipo_servicio, SUM(u.saldo) AS ingresos 
+FROM USUARIO u
+WHERE u.nombre_usuario =  $P{laboratorio} 
 UNION
 SELECT 'Total' AS tipo_servicio, SUM(ingresos) AS ingresos
 FROM (
     SELECT SUM(c.costo) AS ingresos 
-    FROM CONSULTA c
-    WHERE c.estado = 'FINALIZADA'
+    FROM EXAMEN c
+    WHERE c.estado = 'FINALIZADA' 
+    AND c.laboratorio =  $P{laboratorio}
     UNION
-    SELECT SUM(e.costo) AS ingresos
-    FROM EXAMEN e
-    WHERE e.estado = 'FINALIZADA'
-) AS t]]>
+    SELECT SUM(u.saldo) AS ingresos 
+    FROM USUARIO u
+    WHERE u.nombre_usuario = $P{laboratorio} 
+ ) AS t]]>
 	</queryString>
 	<field name="tipo_servicio" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="tipo_servicio"/>
 		<property name="com.jaspersoft.studio.field.label" value="tipo_servicio"/>
 	</field>
-	<field name="ingresos" class="java.lang.Double">
+	<field name="ingresos" class="java.math.BigDecimal">
 		<property name="com.jaspersoft.studio.field.name" value="ingresos"/>
 		<property name="com.jaspersoft.studio.field.label" value="ingresos"/>
 	</field>
@@ -79,7 +82,7 @@ FROM (
 				<textElement>
 					<font size="20" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Consultas o examenes]]></text>
+				<text><![CDATA[Examenes]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="337" y="1" width="465" height="30" forecolor="#736343" uuid="b66b711b-b2bc-469c-9c80-7ab9d5b9635e"/>

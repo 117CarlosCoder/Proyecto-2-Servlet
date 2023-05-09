@@ -13,9 +13,11 @@
 			<style backcolor="#E6DAC3"/>
 		</conditionalStyle>
 	</style>
+	<parameter name="paciente" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[SELECT *
-FROM EXAMEN]]>
+FROM EXAMEN 
+WHERE paciente = $P{paciente}]]>
 	</queryString>
 	<field name="id" class="java.lang.Integer">
 		<property name="com.jaspersoft.studio.field.name" value="id"/>
@@ -57,6 +59,11 @@ FROM EXAMEN]]>
 		<property name="com.jaspersoft.studio.field.label" value="costo"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="examen"/>
 	</field>
+	<field name="examen" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="examen"/>
+		<property name="com.jaspersoft.studio.field.label" value="examen"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="examen"/>
+	</field>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -89,7 +96,7 @@ FROM EXAMEN]]>
 				<subreport>
 					<reportElement x="1" y="20" width="948" height="160" uuid="ddebffa4-1bee-4ed8-8e00-f9fd45b5b75f"/>
 					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-					<subreportExpression><![CDATA["Examenes.jasper"]]></subreportExpression>
+					<subreportExpression><![CDATA["Examenes.jrxml"]]></subreportExpression>
 				</subreport>
 			</frame>
 		</band>

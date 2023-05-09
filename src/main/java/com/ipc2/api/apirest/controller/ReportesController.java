@@ -6,6 +6,7 @@ import com.ipc2.api.apirest.data.Conexion;
 import com.ipc2.api.apirest.model.Medico.MedicoEspecialidad;
 import com.ipc2.api.apirest.model.Medico.MedicoHorario;
 import com.ipc2.api.apirest.model.Usuario.Usuario;
+import com.ipc2.api.apirest.reportes.Conexion.ConexionDatos;
 import com.ipc2.api.apirest.reportes.GenerarReportes.GenerarReportes;
 import com.ipc2.api.apirest.service.MedicoService;
 import com.ipc2.api.apirest.utils.GsonUtils;
@@ -15,17 +16,21 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import net.sf.jasperreports.engine.JRException;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 @WebServlet("/reportes/*")
 public class ReportesController extends HttpServlet {
 
-    Conexion conexion = new Conexion();;
+    Conexion conexion = new Conexion();
+    ConexionDatos conexionDatos;
     private GenerarReportes generarPDF;
 
     public ReportesController() {
         generarPDF = new GenerarReportes();
+        conexionDatos = ConexionDatos.getInstance();
     }
 
     @Override
@@ -50,19 +55,43 @@ public class ReportesController extends HttpServlet {
 
         if (uri.endsWith("/reportes-administrador")) {
             System.out.println("Entro a reportes admin");
-            generarPDF.generarRep(response,Datos,"Administrador");
+            try {
+                generarPDF.generarRep(response,Datos,"Administrador",conexionDatos, Valor);
+            } catch (JRException e) {
+                throw new RuntimeException(e);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
             response.setStatus(HttpServletResponse.SC_OK);
         }
         if (uri.endsWith("/reportes-pacientes")) {
-            generarPDF.generarRep(response,Datos, "Paciente");
+            try {
+                generarPDF.generarRep(response,Datos, "Paciente", conexionDatos,Valor);
+            } catch (JRException e) {
+                throw new RuntimeException(e);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
             response.setStatus(HttpServletResponse.SC_OK);
         }
         if (uri.endsWith("/reportes-medicos")) {
-            generarPDF.generarRep(response,Datos, "Medicos");
+            try {
+                generarPDF.generarRep(response,Datos, "Medicos", conexionDatos, Valor);
+            } catch (JRException e) {
+                throw new RuntimeException(e);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
             response.setStatus(HttpServletResponse.SC_OK);
         }
         if (uri.endsWith("/reportes-laboratorios")) {
-            generarPDF.generarRep(response,Datos, "Laboratorios");
+            try {
+                generarPDF.generarRep(response,Datos, "Laboratorios", conexionDatos, Valor);
+            } catch (JRException e) {
+                throw new RuntimeException(e);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
             response.setStatus(HttpServletResponse.SC_OK);
         }
 

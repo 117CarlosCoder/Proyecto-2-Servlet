@@ -14,13 +14,9 @@
 		</conditionalStyle>
 	</style>
 	<queryString>
-		<![CDATA[SELECT id, medico, SUM(costo) as ganancias_totales  FROM CONSULTA  WHERE estado = 'FINALIZADA'  GROUP BY id,medico  ORDER BY ganancias_totales DESC]]>
+		<![CDATA[SELECT  medico, SUM(costo) as ganancias_totales FROM CONSULTA   WHERE estado = 'FINALIZADA'   GROUP BY medico ORDER BY ganancias_totales DESC
+]]>
 	</queryString>
-	<field name="id" class="java.lang.Integer">
-		<property name="com.jaspersoft.studio.field.name" value="id"/>
-		<property name="com.jaspersoft.studio.field.label" value="id"/>
-		<property name="com.jaspersoft.studio.field.tree.path" value="consulta"/>
-	</field>
 	<field name="medico" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="medico"/>
 		<property name="com.jaspersoft.studio.field.label" value="medico"/>
@@ -64,14 +60,7 @@
 				</graphicElement>
 			</line>
 			<staticText>
-				<reportElement mode="Transparent" x="0" y="0" width="100" height="30" forecolor="#736343" backcolor="#FFFFFF" uuid="7ca0ecdb-5c22-4487-abd0-35caec6913b5"/>
-				<textElement>
-					<font size="20" isBold="true"/>
-				</textElement>
-				<text><![CDATA[ID]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="101" y="0" width="237" height="30" forecolor="#736343" uuid="634ffca2-3ab5-4cca-a78e-b8ec662fb8dd"/>
+				<reportElement x="1" y="0" width="337" height="30" forecolor="#736343" uuid="634ffca2-3ab5-4cca-a78e-b8ec662fb8dd"/>
 				<textElement>
 					<font size="20" isBold="true"/>
 				</textElement>
@@ -90,17 +79,8 @@
 		<band height="31" splitType="Stretch">
 			<frame>
 				<reportElement style="Row" mode="Opaque" x="0" y="0" width="802" height="30" uuid="fa7cec56-4ec1-48e6-a26e-7266a995d174"/>
-				<textField textAdjust="StretchHeight">
-					<reportElement x="0" y="0" width="100" height="30" uuid="fd35dfd4-6564-405a-9d81-e76628460f38">
-						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="71f9b578-3c13-4d1f-9541-6c52a756fad7"/>
-					</reportElement>
-					<textElement verticalAlignment="Middle">
-						<font size="18"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
-				</textField>
 				<textField>
-					<reportElement x="100" y="0" width="237" height="30" uuid="860840a8-6165-4e44-b696-ab82ce425fa8">
+					<reportElement x="1" y="0" width="336" height="30" uuid="860840a8-6165-4e44-b696-ab82ce425fa8">
 						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="0cb516b8-25dc-4049-8038-1571ebc164f0"/>
 					</reportElement>
 					<textElement verticalAlignment="Middle">

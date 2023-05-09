@@ -11,9 +11,10 @@
 	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="MedicDB"/>
-	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value="YEVYQU1FTmAgLDE1LDE1LGYwNjgzY2ZiLTg0Y2UtNDZhZC1iNzVhLTU4NzUxOTdiNmRiZjs="/>
+	<parameter name="paciente" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[SELECT * FROM EXAMEN WHERE paciente = 1]]>
+		<![CDATA[SELECT * FROM EXAMEN WHERE paciente = $P{paciente} ]]>
 	</queryString>
 	<field name="id" class="java.lang.Integer">
 		<property name="com.jaspersoft.studio.field.name" value="id"/>
@@ -53,6 +54,11 @@
 	<field name="costo" class="java.math.BigDecimal">
 		<property name="com.jaspersoft.studio.field.name" value="costo"/>
 		<property name="com.jaspersoft.studio.field.label" value="costo"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="examen"/>
+	</field>
+	<field name="examen" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="examen"/>
+		<property name="com.jaspersoft.studio.field.label" value="examen"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="examen"/>
 	</field>
 	<background>

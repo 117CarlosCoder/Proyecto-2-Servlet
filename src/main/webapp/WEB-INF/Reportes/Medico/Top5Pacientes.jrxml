@@ -2,7 +2,10 @@
 <!-- Created with Jaspersoft Studio version 6.20.1.final using JasperReports Library version 6.20.1-7584acb244139816654f64e2fd57a00d3e31921e  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Top5Pacientes" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="df013db5-f76e-44d3-b0df-bcbc46d93160">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="MedicDB"/>
-	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.sql.tables">
+		<![CDATA[YFVTVUFSSU9gICwxMzMsMTUsYTViZjljY2UtYmY2Yy00N2JjLWE3MTktZTk4YjU5ZjIyYWE3O2BD
+T05TVUxUQWAgLDE1LDE1LDY4YjRiYjFjLWNlN2YtNDRiNS05ZjVkLTdjYzQ4N2QxNzNhNzs=]]>
+	</property>
 	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
@@ -13,11 +16,12 @@
 			<style backcolor="#E6DAC3"/>
 		</conditionalStyle>
 	</style>
+	<parameter name="medico" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[SELECT u.id AS paciente, u.nombre AS nombre, COUNT(*) AS cantidad_consultas, SUM(costo) AS total_gastos
 FROM CONSULTA c
 JOIN USUARIO u ON c.paciente = u.id
-WHERE c.estado = 'FINALIZADA'
+WHERE c.estado = 'FINALIZADA' AND c.medico = $P{medico} 
 AND u.tipo = 'Paciente'
 GROUP BY u.id
 ORDER BY total_gastos DESC]]>

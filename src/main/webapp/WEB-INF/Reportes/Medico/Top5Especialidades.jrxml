@@ -13,11 +13,9 @@
 			<style backcolor="#E6DAC3"/>
 		</conditionalStyle>
 	</style>
+	<parameter name="medico" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[SELECT especialidad, SUM(costo) AS total_ingresos
-FROM CONSULTA
-GROUP BY especialidad
-ORDER BY total_ingresos DESC]]>
+		<![CDATA[SELECT especialidad, SUM(costo) AS total_ingresos FROM CONSULTA WHERE medico=$P{medico} AND estado='Finalizada' GROUP BY especialidad ORDER BY total_ingresos DESC]]>
 	</queryString>
 	<field name="especialidad" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="especialidad"/>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.20.1.final using JasperReports Library version 6.20.1-7584acb244139816654f64e2fd57a00d3e31921e  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Saldo" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="df013db5-f76e-44d3-b0df-bcbc46d93160">
-	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value="YENPTlNVTFRBYCAsMTUsMTUsNzc1NmY5ZDgtODY2Mi00NzJmLTgyM2MtNDg3NDJjY2M4ZmJjOw=="/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="MedicDB"/>
 	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
@@ -13,25 +13,26 @@
 			<style backcolor="#E6DAC3"/>
 		</conditionalStyle>
 	</style>
+	<parameter name="medico" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[SELECT 'Consultas' AS tipo_servicio, SUM(c.costo) AS ingresos 
 FROM CONSULTA c
-WHERE c.estado = 'FINALIZADA'
+WHERE c.estado = 'FINALIZADA' AND c.medico = $P{medico} 
 UNION
-SELECT 'Exámenes' AS tipo_servicio, SUM(e.costo) AS ingresos
-FROM EXAMEN e
-WHERE e.estado = 'FINALIZADA'
+SELECT 'Saldo' AS tipo_servicio, SUM(u.saldo) AS ingresos 
+FROM USUARIO u
+WHERE u.nombre_usuario = $P{medico}
 UNION
 SELECT 'Total' AS tipo_servicio, SUM(ingresos) AS ingresos
 FROM (
     SELECT SUM(c.costo) AS ingresos 
     FROM CONSULTA c
-    WHERE c.estado = 'FINALIZADA'
+    WHERE c.estado = 'FINALIZADA' AND c.medico = $P{medico}
     UNION
-    SELECT SUM(e.costo) AS ingresos
-    FROM EXAMEN e
-    WHERE e.estado = 'FINALIZADA'
-) AS t;]]>
+    SELECT SUM(u.saldo) AS ingresos 
+    FROM USUARIO u
+    WHERE u.nombre_usuario = $P{medico}
+) AS t]]>
 	</queryString>
 	<field name="tipo_servicio" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="tipo_servicio"/>

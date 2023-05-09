@@ -14,38 +14,23 @@
 		</conditionalStyle>
 	</style>
 	<queryString>
-		<![CDATA[SELECT 'Consultas' AS tipo_servicio, SUM(c.costo) AS ingresos 
-FROM CONSULTA c
-WHERE c.estado = 'FINALIZADA'
-UNION
-SELECT 'Exámenes' AS tipo_servicio, SUM(e.costo) AS ingresos
-FROM EXAMEN e
-WHERE e.estado = 'FINALIZADA'
-UNION
-SELECT 'Total' AS tipo_servicio, SUM(ingresos) AS ingresos
-FROM (
-    SELECT SUM(c.costo) AS ingresos 
-    FROM CONSULTA c
-    WHERE c.estado = 'FINALIZADA'
-    UNION
-    SELECT SUM(e.costo) AS ingresos
-    FROM EXAMEN e
-    WHERE e.estado = 'FINALIZADA'
-) AS t;]]>
+		<![CDATA[SELECT nombre_usuario, saldo FROM USUARIO WHERE nombre_usuario = 'Pac1']]>
 	</queryString>
-	<field name="tipo_servicio" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="tipo_servicio"/>
-		<property name="com.jaspersoft.studio.field.label" value="tipo_servicio"/>
+	<field name="nombre_usuario" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nombre_usuario"/>
+		<property name="com.jaspersoft.studio.field.label" value="nombre_usuario"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="usuario"/>
 	</field>
-	<field name="ingresos" class="java.math.BigDecimal">
-		<property name="com.jaspersoft.studio.field.name" value="ingresos"/>
-		<property name="com.jaspersoft.studio.field.label" value="ingresos"/>
+	<field name="saldo" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.name" value="saldo"/>
+		<property name="com.jaspersoft.studio.field.label" value="saldo"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="usuario"/>
 	</field>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="150" splitType="Stretch">
+		<band height="136" splitType="Stretch">
 			<image onErrorType="Icon">
 				<reportElement x="0" y="0" width="150" height="126" uuid="1c003177-754c-448f-8ce1-16868856f545"/>
 				<imageExpression><![CDATA["/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/medic.png"]]></imageExpression>
@@ -79,14 +64,14 @@ FROM (
 				<textElement>
 					<font size="20" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Consultas o examenes]]></text>
+				<text><![CDATA[Paciente]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="337" y="1" width="465" height="30" forecolor="#736343" uuid="b66b711b-b2bc-469c-9c80-7ab9d5b9635e"/>
 				<textElement>
 					<font size="20" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Ingresos]]></text>
+				<text><![CDATA[Saldo]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
@@ -101,7 +86,7 @@ FROM (
 					<textElement verticalAlignment="Middle">
 						<font size="18"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{tipo_servicio}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{nombre_usuario}]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="340" y="0" width="462" height="30" uuid="b9797203-0000-49fe-898f-edb3750d4869">
@@ -110,7 +95,7 @@ FROM (
 					<textElement verticalAlignment="Middle">
 						<font size="18"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{ingresos}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{saldo}]]></textFieldExpression>
 				</textField>
 			</frame>
 		</band>

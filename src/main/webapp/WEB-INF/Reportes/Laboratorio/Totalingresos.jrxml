@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.20.1.final using JasperReports Library version 6.20.1-7584acb244139816654f64e2fd57a00d3e31921e  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Top5Laboratorios" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="df013db5-f76e-44d3-b0df-bcbc46d93160">
-	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value="YEVYQU1FTmAgLDE1LDE1LGU1NGFlYzNlLTM2YzktNGUwNS04NWMxLWZkMWVkNTI3MTZkODs="/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="MedicDB"/>
 	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
@@ -13,31 +13,24 @@
 			<style backcolor="#E6DAC3"/>
 		</conditionalStyle>
 	</style>
+	<parameter name="laboratorio" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[SELECT 'Consultas' AS tipo_servicio, SUM(c.costo) AS ingresos 
-FROM CONSULTA c
-WHERE c.estado = 'FINALIZADA'
-UNION
-SELECT 'Exámenes' AS tipo_servicio, SUM(e.costo) AS ingresos
+		<![CDATA[SELECT 'Exámenes' AS tipo_servicio, SUM(e.costo) AS ingresos
 FROM EXAMEN e
-WHERE e.estado = 'FINALIZADA'
+WHERE e.estado = 'FINALIZADA' AND e.laboratorio = $P{laboratorio} 
 UNION
-SELECT 'Total' AS tipo_servicio, SUM(ingresos) AS ingresos
+SELECT 'Total' AS tipo_servicio, SUM(ingresos) AS ganancias
 FROM (
-    SELECT SUM(c.costo) AS ingresos 
-    FROM CONSULTA c
-    WHERE c.estado = 'FINALIZADA'
-    UNION
     SELECT SUM(e.costo) AS ingresos
     FROM EXAMEN e
-    WHERE e.estado = 'FINALIZADA'
-) AS t;]]>
+    WHERE e.estado = 'FINALIZADA' AND e.laboratorio = $P{laboratorio}
+) AS t]]>
 	</queryString>
 	<field name="tipo_servicio" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="tipo_servicio"/>
 		<property name="com.jaspersoft.studio.field.label" value="tipo_servicio"/>
 	</field>
-	<field name="ingresos" class="java.lang.Double">
+	<field name="ingresos" class="java.math.BigDecimal">
 		<property name="com.jaspersoft.studio.field.name" value="ingresos"/>
 		<property name="com.jaspersoft.studio.field.label" value="ingresos"/>
 	</field>
@@ -79,7 +72,7 @@ FROM (
 				<textElement>
 					<font size="20" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Consultas o examenes]]></text>
+				<text><![CDATA[Examenes]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="337" y="1" width="465" height="30" forecolor="#736343" uuid="b66b711b-b2bc-469c-9c80-7ab9d5b9635e"/>

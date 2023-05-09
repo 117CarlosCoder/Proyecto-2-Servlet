@@ -97,7 +97,7 @@
 				<subreport overflowType="Stretch">
 					<reportElement x="0" y="10" width="968" height="70" uuid="626965c2-0d6c-4af4-8b73-3b5b34ea1e82"/>
 					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-					<subreportExpression><![CDATA["/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Paciente/Consultas.jasper"]]></subreportExpression>
+					<subreportExpression><![CDATA["Consultas.jrxml"]]></subreportExpression>
 				</subreport>
 			</frame>
 			<frame>
@@ -105,7 +105,7 @@
 				<subreport>
 					<reportElement x="1" y="25" width="968" height="55" uuid="4f38d86a-7325-4226-86e9-a1571955dca5"/>
 					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-					<subreportExpression><![CDATA["/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Paciente/Examenes.jasper"]]></subreportExpression>
+					<subreportExpression><![CDATA["Examenes.jasper"]]></subreportExpression>
 				</subreport>
 			</frame>
 		</band>
