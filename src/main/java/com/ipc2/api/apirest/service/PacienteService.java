@@ -1,5 +1,6 @@
 package com.ipc2.api.apirest.service;
 import com.ipc2.api.apirest.data.PacienteDB;
+import com.ipc2.api.apirest.data.UsuarioDB;
 import com.ipc2.api.apirest.model.Medico.Especialidades;
 import com.ipc2.api.apirest.model.Medico.MedicoEspecialidad;
 import com.ipc2.api.apirest.model.Paciente.ConsultaPaciente;
@@ -12,8 +13,11 @@ import java.util.List;
 public class PacienteService {
 
     private PacienteDB pacienteDB;
+    private UsuarioDB usuarioDB;
     public PacienteService(Connection conectar) {
+
         pacienteDB = new PacienteDB(conectar);
+        usuarioDB = new UsuarioDB(conectar);
     }
 
     public void solicitarConsulta(ConsultaPaciente paciente) {
@@ -30,6 +34,9 @@ public class PacienteService {
         return medicos;
     }
 
+    public Integer obtenrId(Usuario usuario) {
+        return usuarioDB.obtnerId(usuario);
+    }
     public List<ListarMedicosNombre> listarMedico() {
         List<ListarMedicosNombre> medicos= pacienteDB.listarMedicos();
         System.out.println("los medicos : " + medicos);

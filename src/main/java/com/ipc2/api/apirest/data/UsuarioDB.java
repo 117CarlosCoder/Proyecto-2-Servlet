@@ -110,6 +110,25 @@ public class UsuarioDB {
     }
 
 
+    public Integer obtnerId(Usuario usuario) {
+        String query = "SELECT id FROM USUARIO WHERE cui=? ";
+        Integer id = 0;
+        try (var preparedStatement = conexion.prepareStatement(query)) {
+
+            preparedStatement.setInt(1,usuario.getCui());
+
+
+            try (var resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    id = resultSet.getInt("id");
+                }
+            }
+        }catch (SQLException e) {
+            System.out.println("Error al consultar el id: " + e);
+        }
+
+        return id;
+    }
 
     /*public Optional<Usuario> obtenerUsuario(String username, String password, String email) {
         String query = "SELECT * FROM USUARIOTIENDA_N WHERE username = ? AND password = ? OR email = ? AND password = ? ";

@@ -18,6 +18,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 @WebServlet("/medicos/*")
@@ -80,7 +81,10 @@ public class MedicoController extends HttpServlet {
 
             ObjectMapper objectMappeCLr = new ObjectMapper();
             //String jsonclassCL = objectMappeCLr.writeValueAsString(medicoService.listarEspecialidad(Valor));
-            String jsonclassCL = medicoService.listarEspecialidad(Valor).isPresent() ? objectMappeCLr.writeValueAsString(medicoService.listarEspecialidad(Valor).get()) : "";
+            System.out.println("Valor de json : " + medicoService.listarEspecialidad(Valor));
+            List<MedicoEspecialidad> especialidades = medicoService.listarEspecialidad(Valor);
+            String jsonclassCL = objectMappeCLr.writeValueAsString(especialidades);
+            //String jsonclassCL = medicoService.listarEspecialidad(Valor).toString();
             System.out.println("Especialidad");
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
@@ -282,15 +286,15 @@ public class MedicoController extends HttpServlet {
         if (usuario == null){
             return false;
         }
-        Optional<MedicoEspecialidad> especialidad = medicoService.listarEspecialidad(usuario);
+        List<MedicoEspecialidad> especialidad = medicoService.listarEspecialidad(usuario);
         if (especialidad.isEmpty() || especialidad == null){
             return false;
         }
         return true;
     }
 
-    public Optional<MedicoEspecialidad> listarEspecialidadAgregada( Usuario usuario) throws IOException {
-        Optional<MedicoEspecialidad> especialidad = medicoService.listarEspecialidad(usuario);
+    public List<MedicoEspecialidad> listarEspecialidadAgregada( Usuario usuario) throws IOException {
+        List<MedicoEspecialidad> especialidad = medicoService.listarEspecialidad(usuario);
         return especialidad;
     }
 

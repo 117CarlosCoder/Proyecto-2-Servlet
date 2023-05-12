@@ -3,10 +3,13 @@ package com.ipc2.api.apirest.data;
 import com.ipc2.api.apirest.model.Laboratorio.LaboratorioInfoExamen;
 import com.ipc2.api.apirest.model.Laboratorio.TipoExamen;
 import com.ipc2.api.apirest.model.Laboratorio.ValorExamen;
+import com.ipc2.api.apirest.model.Medico.MedicoEspecialidad;
 import com.ipc2.api.apirest.model.Usuario.Usuario;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class LaboratorioDB {
@@ -80,6 +83,28 @@ public class LaboratorioDB {
         }
 
         return Optional.ofNullable(labinfo);
+    }
+
+    public List<LaboratorioInfoExamen> listarExamenAdmin() {
+        var labexamen = new ArrayList<LaboratorioInfoExamen>();
+        try (var stmt = conexion.createStatement(); var resultSet = stmt.executeQuery("SELECT * FROM TIPOEXAMENADMIN")) {
+
+            while (resultSet.next()) {
+
+                var id = resultSet.getInt("id");
+                var cui = resultSet.getInt("cui");
+                var costo  = resultSet.getBigDecimal("costo") ;
+                var nombre  = resultSet.getString("nombre") ;
+                var descripcion = resultSet.getString("descripcion");
+
+                var labexamenes = new LaboratorioInfoExamen(id, cui, nombre,costo, descripcion);
+
+                labexamen.add(labexamenes);
+            }
+        }catch (SQLException e) {
+            System.out.println("Error al consultar: " + e);
+        }
+        return labexamen;
     }
 
 }

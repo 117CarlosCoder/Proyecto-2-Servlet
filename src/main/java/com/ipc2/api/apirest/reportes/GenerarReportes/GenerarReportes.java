@@ -1,7 +1,11 @@
 package com.ipc2.api.apirest.reportes.GenerarReportes;
 
+import com.ipc2.api.apirest.data.AdminDB;
+import com.ipc2.api.apirest.data.Conexion;
+import com.ipc2.api.apirest.data.PacienteDB;
 import com.ipc2.api.apirest.model.Usuario.Usuario;
 import com.ipc2.api.apirest.reportes.Conexion.ConexionDatos;
+import com.ipc2.api.apirest.service.PacienteService;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -13,6 +17,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -20,8 +25,12 @@ import java.util.Map;
 
 public class GenerarReportes extends HttpServlet {
 
+    PacienteService pacienteService;
+    Conexion conexion = new Conexion();
 
-
+    public GenerarReportes() {
+        this.pacienteService = new PacienteService(conexion.obtenerConexion());
+    }
     public void generarRep(HttpServletResponse response, String Ruta , String Tipo, ConexionDatos conexionDatos, Usuario usuario) throws ServletException, IOException, JRException, SQLException {
         System.out.println("Cargar informe");
         JasperReport informe = null;
@@ -64,7 +73,12 @@ public class GenerarReportes extends HttpServlet {
         JasperReport jasperReport = JasperCompileManager.compileReport(rutaRelativa);
         Map<String, Object> parameters = new HashMap<>() {{
             put("medico", usuario.getNombre_usuario());
-            put("paciente", usuario.getNombre_usuario());
+            try {
+                System.out.println(pacienteService.obtenrId(usuario));
+            }catch (Exception e){
+                System.out.println("Que error : " + e);
+            }
+            put("paciente", pacienteService.obtenrId(usuario));
             put("laboratorio", usuario.getNombre_usuario());
 
         }};
@@ -119,7 +133,7 @@ public class GenerarReportes extends HttpServlet {
                     return "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Paciente/ConsultasMedicas.jrxml";
 
                 case "ExamenesMedicos":
-                    return "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Paciente/HistorialEsamenes.jrxml";
+                    return "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Paciente/ExamenesMedicos.jrxml";
 
                 case  "HistorialMedico":
                     return "/Users/calin10/Documents/Cunoc/IPC2/Proyectosanteriores/apirest/src/main/webapp/WEB-INF/Reportes/Paciente/HistorialMedico.jrxml";

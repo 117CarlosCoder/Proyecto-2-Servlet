@@ -94,6 +94,8 @@ public class CargarDatosController extends HttpServlet {
             catch (Exception e){
                 System.out.println("Error al cargar datos: " + e.getMessage());
                 e.printStackTrace();
+                System.out.println("error");
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             }
 
 

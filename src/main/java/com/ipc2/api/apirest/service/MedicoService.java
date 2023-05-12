@@ -22,6 +22,10 @@ public class MedicoService {
         medicoDB.crearEspecialidad(especialidad,usuario);
     }
 
+    public void crearEspecialidadAdmin(MedicoEspecialidad especialidad) {
+        medicoDB.crearEspecialidadAdmin(especialidad);
+    }
+
     public void cargarEspecialidades( Especialidades especialidad) {
         medicoDB.cargarEspecialidades(especialidad);
     }
@@ -33,8 +37,8 @@ public class MedicoService {
         medicoDB.crearEspecialidadAdmin(especialidad,usuario);
     }
 
-    public Optional<MedicoEspecialidad> listarEspecialidad(Usuario usuario) {
-        Optional<MedicoEspecialidad> especialidad = medicoDB.listarEspecialidad(usuario);
+    public List<MedicoEspecialidad> listarEspecialidad(Usuario usuario) {
+        List<MedicoEspecialidad> especialidad = medicoDB.listarEspecialidad(usuario);
         System.out.println("la especialidad da: " + especialidad);
         return especialidad;
     }
@@ -53,6 +57,12 @@ public class MedicoService {
     public List<Especialidades> listarEspecialidades() {
         List<Especialidades> especialidades= medicoDB.listarEspecialidades();
         System.out.println("las especialidades : " + especialidades);
+        return especialidades;
+    }
+
+    public List<MedicoEspecialidad> listarEspecialidadesAdmin() {
+        List<MedicoEspecialidad> especialidades= medicoDB.listarEspecialidadesAdmin();
+        System.out.println("las especialidades admin : " + especialidades);
         return especialidades;
     }
 

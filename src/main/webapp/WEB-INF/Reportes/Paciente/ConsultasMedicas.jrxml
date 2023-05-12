@@ -2,7 +2,7 @@
 <!-- Created with Jaspersoft Studio version 6.20.1.final using JasperReports Library version 6.20.1-7584acb244139816654f64e2fd57a00d3e31921e  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ConsultasMedicas" pageWidth="1000" pageHeight="1200" orientation="Landscape" columnWidth="960" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="df013db5-f76e-44d3-b0df-bcbc46d93160">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="MedicDB"/>
-	<property name="com.jaspersoft.studio.data.sql.tables" value="YENPTlNVTFRBYCAsMTUsMTUsNzc4ZThhMmMtYTBiNS00N2FkLWFjYzYtZTNkYzFiMGZkMjBhOw=="/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
 	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
@@ -15,9 +15,9 @@
 	</style>
 	<parameter name="paciente" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[SELECT id, fecha_inicio, fecha_fin, estado, porcentaje, paciente,medico,costo
+		<![CDATA[SELECT id, fecha_inicio, fecha_fin, estado, porcentaje, paciente,medico,costo, especialidad
 FROM CONSULTA
-WHERE paciente =  $P{paciente} ]]>
+WHERE paciente =  $P{paciente}]]>
 	</queryString>
 	<field name="id" class="java.lang.Integer">
 		<property name="com.jaspersoft.studio.field.name" value="id"/>
@@ -57,6 +57,11 @@ WHERE paciente =  $P{paciente} ]]>
 	<field name="costo" class="java.math.BigDecimal">
 		<property name="com.jaspersoft.studio.field.name" value="costo"/>
 		<property name="com.jaspersoft.studio.field.label" value="costo"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="consulta"/>
+	</field>
+	<field name="especialidad" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="especialidad"/>
+		<property name="com.jaspersoft.studio.field.label" value="especialidad"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="consulta"/>
 	</field>
 	<background>
@@ -134,7 +139,7 @@ WHERE paciente =  $P{paciente} ]]>
 				<textElement>
 					<font size="20" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Paciente]]></text>
+				<text><![CDATA[Especialidad]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
@@ -185,7 +190,7 @@ WHERE paciente =  $P{paciente} ]]>
 					<textElement verticalAlignment="Middle">
 						<font size="18"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{medico}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{especialidad}]]></textFieldExpression>
 				</textField>
 			</frame>
 		</band>

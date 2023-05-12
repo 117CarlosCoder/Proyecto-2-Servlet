@@ -1,6 +1,25 @@
 package com.ipc2.api.apirest.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import javax.crypto.*;
+import javax.crypto.spec.SecretKeySpec;
+import javax.xml.bind.DatatypeConverter;
+
+
+import org.apache.commons.codec.binary.StringUtils;
+import org.apache.commons.crypto.cipher.CryptoCipher;
+import org.apache.commons.crypto.cipher.CryptoCipherFactory;
+import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
+import java.util.Base64;
+
+import javax.crypto.spec.SecretKeySpec;
+//import org.apache.commons.crypto.cipher.CryptoCipher;
+import org.apache.commons.crypto.cipher.CryptoCipherFactory;
+import org.apache.commons.crypto.cipher.CryptoCipherFactory.CipherProvider;
+
+import org.apache.commons.crypto.cipher.CryptoCipherFactory.CipherProvider;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -21,13 +40,25 @@ import com.ipc2.api.apirest.utils.GsonUtils;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
+import org.apache.commons.crypto.utils.Utils;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
+import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.security.SecureRandom;
+
+import static org.apache.commons.collections4.trie.analyzer.StringKeyAnalyzer.LENGTH;
 
 @WebServlet("/usuarios/*")
 
 public class UsuarioController extends HttpServlet {
 
+    private static final String SECRET_KEY = "secret key";
+    private static final String INIT_VECTOR = "initialization vector";
+    private static final String KEY_ALGORITHM ="AES" ;
     private GsonUtils<MedicoEspecialidad> gsonEspecialidad;
     private GsonUtils<MedicoHorario> gsonHorario;
 
@@ -76,7 +107,6 @@ public class UsuarioController extends HttpServlet {
         getServletContext().setAttribute("userSession", session);
         session.setMaxInactiveInterval(3600);
         session.setAttribute("conexion", conexion.obtenerConexion());
-
 
         System.out.println("Calculando error");
         String json = request.getReader().readLine();
@@ -218,9 +248,36 @@ public class UsuarioController extends HttpServlet {
 
     public void iniciarUsuario(HttpServletRequest request, HttpServletResponse response,HttpSession session, Usuario usuario) throws IOException {
 
-        String username = usuario.getCorreo();
-        String email = usuario.getCorreo();
-        String password = usuario.getContraseña();
+        String username = null;
+        String email = null;
+        String password = null;
+        String contra = usuario.getContraseña();
+        String llave = "fZ@b3Sb&N1Nefr&Rp#@NqSFhZ0!X%831";
+
+         /*try {
+
+            SecretKeySpec secretKeySpec = new SecretKeySpec(llave.getBytes(), "AES");
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
+            cipher.init(Cipher.DECRYPT_MODE, secretKeySpec);
+            byte[] passwordBytes = Base64.getDecoder().decode(contra);
+            byte[] passwordDesencriptadaBytes = cipher.doFinal(passwordBytes);
+            String valor = new String(passwordDesencriptadaBytes);
+
+            System.out.println(valor);
+
+        } catch (Exception e) {
+            // handle decryption error
+            System.out.println("Desencriptacion : " + e);
+        }*/
+
+        try {
+             username = usuario.getCorreo();
+             email = usuario.getCorreo();
+             password = usuario.getContraseña();
+             System.out.println("La contra es: "+ password);
+        }catch (Exception e ){
+            System.out.println("ALgun error aqui : " + e);
+        }
 
         if (validarUsuario(username, password, email)) {
             session.setAttribute("user", usuarioLogin);
@@ -290,6 +347,8 @@ public class UsuarioController extends HttpServlet {
         laboratorioService.cargarValorExam(examen);
         return true;
     }
+
+
 
     /*private int processPath(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String pathInfo = request.getPathInfo();

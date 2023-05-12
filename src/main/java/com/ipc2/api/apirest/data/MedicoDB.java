@@ -33,6 +33,22 @@ public class MedicoDB {
         }
     }
 
+    public void crearEspecialidadAdmin(MedicoEspecialidad especialidad) {
+
+        String query = "INSERT INTO ESPECIALIDADMEDICO (id, cui, costo, nombre, descripcion) VALUES (?, ?, ?, ?, ?)";
+        try (var preparedStatement = conexion.prepareStatement(query)) {
+            preparedStatement.setNull(1, Types.INTEGER);
+            preparedStatement.setInt(2, especialidad.getCui());
+            preparedStatement.setBigDecimal(3, especialidad.getCosto());
+            preparedStatement.setString(4, especialidad.getNombre());
+            preparedStatement.setString(5, especialidad.getDescripcion());
+            preparedStatement.executeUpdate();
+            System.out.println("Especialidad creada admin");
+        } catch (SQLException e) {
+            System.out.println("Error al crear especialidad admin: " + e);
+        }
+    }
+
     public void cargarEspecialidades(Especialidades especialidad) {
         String query = "INSERT INTO ESPECIALIDAD (id, nombre, descripcion) VALUES (?, ?, ?)";
         try (var preparedStatement = conexion.prepareStatement(query)) {
@@ -89,29 +105,52 @@ public class MedicoDB {
         }
     }
 
-    public Optional<MedicoEspecialidad> listarEspecialidad(Usuario usuario) {
+    public List<MedicoEspecialidad> listarEspecialidadesAdmin() {
+        var especialidades = new ArrayList<MedicoEspecialidad>();
+        try (var stmt = conexion.createStatement(); var resultSet = stmt.executeQuery("SELECT * FROM ESPECIALIDADADMIN")) {
+
+            while (resultSet.next()) {
+
+                var id = resultSet.getInt("id");
+                var cui = resultSet.getInt("cui");
+                var costo  = resultSet.getBigDecimal("costo") ;
+                var nombre  = resultSet.getString("nombre") ;
+                var descripcion = resultSet.getString("descripcion");
+
+                var medicoEspecialidad = new MedicoEspecialidad(id, cui, costo,nombre, descripcion);
+
+                especialidades.add(medicoEspecialidad);
+            }
+        }catch (SQLException e) {
+            System.out.println("Error al consultar: " + e);
+        }
+        return especialidades;
+    }
+
+    public List<MedicoEspecialidad> listarEspecialidad(Usuario usuario) {
         int cui = usuario.getCui();
+        var especialidades = new ArrayList<MedicoEspecialidad>();
         String query =  "SELECT * FROM ESPECIALIDADMEDICO WHERE cui = ?";
-        MedicoEspecialidad medico = null;
         try (var preparedStatement = conexion.prepareStatement(query)) {
 
             preparedStatement.setInt(1, cui);
 
 
             try (var resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
+                while (resultSet.next()) {
                     var id = resultSet.getInt("id");
                     var costo = resultSet.getBigDecimal("costo");
                     var nombre = resultSet.getString("nombre");
                     var descripcion = resultSet.getString("descripcion");
-                    medico = new MedicoEspecialidad(id, cui, costo,nombre, descripcion);
+                    var medicoEspecialidad = new MedicoEspecialidad(id, cui, costo,nombre, descripcion);
+                    especialidades.add(medicoEspecialidad);
                 }
             }
         }catch (SQLException e) {
             System.out.println("Error al listar especialidades: " + e);
         }
 
-        return Optional.ofNullable(medico);
+        return especialidades;
     }
 
     public List<Especialidades> listarEspecialidades() {
@@ -194,10 +233,11 @@ public class MedicoDB {
 
     public void cambiarCosto(MedicoEspecialidad especialidad, Usuario usuario) {
         int cui = usuario.getCui();
-        String query = "UPDATE ESPECIALIDADMEDICO SET costo = ? WHERE cui = ?";
+        String query = "UPDATE ESPECIALIDADMEDICO SET costo = ? WHERE cui = ? AND id = ?";
         try (var preparedStatement = conexion.prepareStatement(query)) {
             preparedStatement.setBigDecimal(1, especialidad.getCosto());
             preparedStatement.setInt(2, cui);
+            preparedStatement.setInt(3, especialidad.getId());
             preparedStatement.executeUpdate();
             System.out.println("Costo cambiado");
         } catch (SQLException e) {

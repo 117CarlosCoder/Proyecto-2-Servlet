@@ -13,11 +13,9 @@
 			<style backcolor="#E6DAC3"/>
 		</conditionalStyle>
 	</style>
-	<parameter name="paciente" class="java.lang.String"/>
+	<parameter name="paciente" class="java.lang.Integer"/>
 	<queryString>
-		<![CDATA[SELECT *
-FROM EXAMEN 
-WHERE paciente = $P{paciente}]]>
+		<![CDATA[SELECT * FROM EXAMEN WHERE paciente = $P{paciente}]]>
 	</queryString>
 	<field name="id" class="java.lang.Integer">
 		<property name="com.jaspersoft.studio.field.name" value="id"/>
@@ -90,17 +88,100 @@ WHERE paciente = $P{paciente}]]>
 		<band splitType="Stretch"/>
 	</pageHeader>
 	<columnHeader>
-		<band height="230" splitType="Stretch">
+		<band height="83" splitType="Stretch">
 			<frame>
-				<reportElement x="0" y="30" width="949" height="200" uuid="d06b355c-c851-47ed-964c-6bfa3864493e"/>
-				<subreport>
-					<reportElement x="1" y="20" width="948" height="160" uuid="ddebffa4-1bee-4ed8-8e00-f9fd45b5b75f"/>
-					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-					<subreportExpression><![CDATA["Examenes.jrxml"]]></subreportExpression>
-				</subreport>
+				<reportElement x="0" y="30" width="960" height="50" uuid="d06b355c-c851-47ed-964c-6bfa3864493e"/>
+				<staticText>
+					<reportElement x="0" y="10" width="138" height="30" forecolor="#736343" uuid="bc677d4d-9c19-4d93-b79e-1b5673fb924b"/>
+					<textElement>
+						<font size="20" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Examen]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="138" y="11" width="220" height="30" forecolor="#736343" uuid="374e02d5-f498-48fb-8c06-476838ce92e2"/>
+					<textElement>
+						<font size="20" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Fecha Solicitud]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="828" y="11" width="132" height="30" forecolor="#736343" uuid="504d057b-5040-4c96-b9fe-ee15ef96caab"/>
+					<textElement>
+						<font size="20"/>
+					</textElement>
+					<text><![CDATA[Costo]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="358" y="11" width="179" height="30" forecolor="#736343" uuid="8c7c2df5-ed66-46f0-b373-4405986a552d"/>
+					<textElement>
+						<font size="20" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Fecha Fin]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="537" y="11" width="130" height="30" forecolor="#736343" uuid="6f25d184-9296-4c7a-868c-dd3cd7f386d2"/>
+					<textElement>
+						<font size="20" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Estado]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="667" y="11" width="160" height="30" forecolor="#736343" uuid="fc7a6724-8b86-4572-a356-b0f491f16948"/>
+					<textElement>
+						<font size="20" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Laboratorio]]></text>
+				</staticText>
 			</frame>
 		</band>
 	</columnHeader>
+	<detail>
+		<band height="50">
+			<textField>
+				<reportElement x="360" y="-2" width="179" height="30" uuid="099099bb-677d-4b9b-97ae-8565de22391c"/>
+				<textElement>
+					<font size="20"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fecha_fin}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="139" y="-1" width="221" height="30" uuid="b6d0434b-742d-4d8d-82fd-eeecbae6b4e0"/>
+				<textElement>
+					<font size="20"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fecha_solicitud}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="539" y="-1" width="130" height="30" uuid="4864a592-ac6d-49fc-b11e-5ebba42379d7"/>
+				<textElement>
+					<font size="20"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{estado}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="669" y="-2" width="160" height="30" uuid="ab7a1b16-18b0-436a-ab73-57641be3055e"/>
+				<textElement>
+					<font size="20"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{laboratorio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="829" y="-1" width="131" height="30" uuid="f2b4692c-8c41-49d6-8933-8e1a8645397d"/>
+				<textElement>
+					<font size="20"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{costo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="-1" width="138" height="30" uuid="7f7e248c-9ccb-442b-a67c-964af74776f2"/>
+				<textElement>
+					<font size="20"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{examen}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
 	<columnFooter>
 		<band height="24" splitType="Stretch">
 			<line>

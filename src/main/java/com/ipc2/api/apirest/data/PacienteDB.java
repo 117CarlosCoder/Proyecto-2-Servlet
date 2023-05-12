@@ -34,13 +34,23 @@ public class PacienteDB {
     }
 
     public void cargarConsulta(ConsultaPaciente paciente) {
+
+        Double porcentaje = null;
+
+        String cambio = "SELECT porcentaje FROM PORCENTAJE WHERE id = (SELECT MAX(id) FROM PORCENTAJE)";
+        try (var stmt = conexion.createStatement(); var resultSet = stmt.executeQuery(cambio)){
+            porcentaje = resultSet.getDouble("porcentaje");
+        }catch (SQLException e) {
+            System.out.println("Error al crear consulta: " + e);
+        }
+
         String query = "INSERT INTO CONSULTA (id, fecha_inicio,fecha_fin, estado,porcentaje, costo, paciente, medico, especialidad) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (var preparedStatement = conexion.prepareStatement(query)) {
             preparedStatement.setNull(1, Types.INTEGER);
             preparedStatement.setString(2, paciente.getFecha_inicio());
             preparedStatement.setString(3, paciente.getFecha_fin());
             preparedStatement.setString(4, paciente.getEstado());
-            preparedStatement.setDouble(5, paciente.getPorcentaje());
+            preparedStatement.setDouble(5, porcentaje);
             preparedStatement.setBigDecimal(6, BigDecimal.valueOf(0));
             preparedStatement.setInt(7, paciente.getPaciente());
             preparedStatement.setString(8, paciente.getMedico());
