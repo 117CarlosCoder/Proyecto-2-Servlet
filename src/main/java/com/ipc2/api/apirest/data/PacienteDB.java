@@ -1,8 +1,10 @@
 package com.ipc2.api.apirest.data;
 
+import com.ipc2.api.apirest.model.Laboratorio.LaboratorioInfoExamen;
 import com.ipc2.api.apirest.model.Medico.Especialidades;
 import com.ipc2.api.apirest.model.Paciente.ConsultaPaciente;
 import com.ipc2.api.apirest.model.Paciente.ListarMedicosNombre;
+import com.ipc2.api.apirest.model.Usuario.Usuario;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -33,6 +35,18 @@ public class PacienteDB {
         }
     }
 
+    public void recargarSaldo(Usuario usuario, int saldonuevo) {
+        String query = "UPDATE USUARIO SET saldo = saldo + ? WHERE cui = ?";
+        try (var preparedStatement = conexion.prepareStatement(query)) {
+
+            preparedStatement.setInt(1, saldonuevo);
+            preparedStatement.setInt(2, usuario.getCui());
+            preparedStatement.executeUpdate();
+
+        }catch (SQLException e) {
+            System.out.println("Error al meter saldo: " + e);
+        }
+    }
     public void cargarConsulta(ConsultaPaciente paciente) {
 
         Double porcentaje = null;

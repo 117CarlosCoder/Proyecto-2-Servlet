@@ -23,8 +23,11 @@ public class PacienteController extends HttpServlet {
 
     Conexion conexion = new Conexion();
     private PacienteService pacienteService;
+
+    private UsuarioService usuarioService;
     public PacienteController() {
         pacienteService = new PacienteService(conexion.obtenerConexion());
+        usuarioService = new UsuarioService(conexion.obtenerConexion());
     }
 
     @Override
@@ -45,6 +48,21 @@ public class PacienteController extends HttpServlet {
             ObjectMapper objectMapper = new ObjectMapper();
             String jsonclass = objectMapper.writeValueAsString(pacienteService.listarMedico());
             System.out.println("Listando medicos");
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(jsonclass);
+            response.setStatus(HttpServletResponse.SC_OK);
+        }
+
+        if (uri.endsWith("/cargarsaldo")) {
+
+            System.out.println("Valor : " + Valor);
+            System.out.println("Valor nombre: " + Valor.getNombre_usuario());
+            System.out.println("Valor contra: " + Valor.getContraseña());
+            ObjectMapper objectMapper = new ObjectMapper();
+            String jsonclass = objectMapper.writeValueAsString(usuarioService.obtenerUsuario(Valor.getNombre_usuario()
+            ,Valor.getContraseña(), Valor.getNombre_usuario()).get());
+            System.out.println("Listando usuario : " + jsonclass);
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             response.getWriter().write(jsonclass);
@@ -95,5 +113,38 @@ public class PacienteController extends HttpServlet {
         }
 
     }
+
+    @Override
+    public void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Usuario Valor = null;
+        HttpSession session = (HttpSession) getServletContext().getAttribute("userSession");
+        if (session != null) {
+            Valor = (Usuario) session.getAttribute("user");
+
+        }
+        if (Valor == null) {
+            return;
+        }
+
+        String contentType = request.getContentType();
+        String uri = request.getRequestURI();
+        System.out.println("Sesion en medicocontroller : " + session);
+        System.out.println("valor de usuario : " + Valor);
+        String json = request.getReader().readLine(); // Lee el archivo JSON enviado desde Angula
+        Gson gson = new Gson();
+        JsonElement jsonElement = gson.fromJson(json, JsonElement.class);
+
+        if (uri.endsWith("/recargarsaldo")) {
+
+            System.out.println("Recargar saldo : " + json);
+            response.setContentType("text/plain");
+            response.setCharacterEncoding("UTF-8");
+            pacienteService.recargarSaldo(Valor, Integer.parseInt(json));
+            response.getWriter().write("Saldo Cambiado");
+            response.setStatus(HttpServletResponse.SC_OK);
+        }
+
+    }
+
 
 }

@@ -43,6 +43,11 @@ public class PacienteService {
         return medicos;
     }
 
+    public void recargarSaldo(Usuario usuario, int saldo){
+        pacienteDB.recargarSaldo(usuario, saldo);
+        System.out.println("Cambio de saldo");
+    }
+
 
 
 }

@@ -23,6 +23,8 @@ public class UsuarioService {
         return usuarioDB.listar();
     }
     public Optional<Usuario> obtenerUsuario(String username, String password, String email) {
-        return usuarioDB.obtenerUsuario(username, password, email);
+        Optional<Usuario> usuraioobtenido = usuarioDB.obtenerUsuario(username, password, email);
+        System.out.println(usuraioobtenido);
+        return usuraioobtenido;
     }
 }
